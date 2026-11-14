@@ -79,7 +79,7 @@ export function PegSolitaireBoard({ state, onAction }: PegSolitaireBoardProps) {
     <div className="arena-layout">
       <div className="arena-board-col">
         <BoardPerspectiveStage className="arena-square-board">
-          <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#4f2e18] to-[#2e190b] p-2 sm:p-3.5 border-2 border-[#d4af37]/55 shadow-2xl">
+          <div className="boardora-3d-board rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#4f2e18] to-[#2e190b] p-2 sm:p-3.5 border-2 border-[#d4af37]/55 shadow-2xl">
             <svg
               viewBox="0 0 420 420"
               className="w-full h-auto block select-none"
