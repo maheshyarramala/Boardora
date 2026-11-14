@@ -1,6 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
-import { RefreshCw } from 'lucide-react';
 import type { GameCatalogEntry } from '../../core/catalog';
 import type { GameEngine, GameEvent, GameOutcome, MatchSetupConfig } from '../../core/engine';
 import { calculateMatchXp } from '../../core/progression';
@@ -345,7 +344,7 @@ export function ActiveMatchRunner({
     ) => {
       const movesCount = getMoveCount(nextState);
       if (nextOutcome?.finished) {
-        await recordFinishedMatch(nextState, nextOutcome, null);
+        await recordFinishedMatch(nextState, nextOutcome);
       } else {
         const sessionObj: ActiveSession = {
           schemaVersion: CURRENT_SCHEMA_VERSION,
