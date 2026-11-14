@@ -166,7 +166,7 @@ export function LudoBoard({
     <div className="arena-layout">
       {/* 15x15 Inlaid Tabletop SVG Board */}
       <div className="arena-board-col">
-        <div className="arena-square-board rounded-2xl bg-[#2A1D18] p-2 sm:p-3 border-2 border-[var(--cp-border-strong)] shadow-[0_24px_48px_-14px_rgba(0,0,0,0.75)]">
+        <div className="arena-square-board boardora-3d-board rounded-2xl bg-[#2A1D18] p-2 sm:p-3 border-2 border-[var(--cp-border-strong)] shadow-[0_24px_48px_-14px_rgba(0,0,0,0.75)]">
         <svg
           viewBox={`0 0 ${15 * CELL} ${15 * CELL}`}
           className="w-full h-auto block rounded-xl bg-[#F4EFE4]"
