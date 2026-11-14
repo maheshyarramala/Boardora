@@ -12,9 +12,9 @@ export function SurfaceCard({
 }) {
   return (
     <div
-      className={`rounded-2xl bg-[var(--cp-bg-elevated)] border transition-colors duration-150 ${
+      className={`rounded-2xl bg-[var(--cp-bg-elevated)]/90 backdrop-blur-sm border transition-all duration-200 ${
         highlighted
-          ? 'border-[var(--cp-border-strong)] shadow-[0_16px_36px_-14px_rgba(3,9,20,0.7),inset_0_1px_0_rgba(214,173,85,0.14)]'
+          ? 'border-[var(--cp-border-strong)] shadow-[0_22px_48px_-22px_rgba(3,9,20,0.9),inset_0_1px_0_rgba(214,173,85,0.18)]'
           : 'border-[var(--cp-border)] shadow-[0_10px_24px_-12px_rgba(3,9,20,0.55)]'
       } ${className}`}
     >
