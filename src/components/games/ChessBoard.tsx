@@ -30,7 +30,7 @@ function StauntonPieceSvg({
   color: 'w' | 'b';
 }) {
   const isWhite = color === 'w';
-  const fill = isWhite ? '#F7F1E3' : '#261A15';
+  const fill = isWhite ? 'url(#chess-ivory-metal)' : 'url(#chess-obsidian-metal)';
   const stroke = isWhite ? '#3E2723' : '#D4AF37';
   const accent = isWhite ? '#C5A253' : '#8C6D32';
 
@@ -40,6 +40,20 @@ function StauntonPieceSvg({
       className="w-[82%] h-[82%] drop-shadow-[0_4px_4px_rgba(0,0,0,0.45)] pointer-events-none select-none"
       aria-hidden="true"
     >
+      <defs>
+        <linearGradient id="chess-ivory-metal" x1="8%" y1="5%" x2="92%" y2="100%">
+          <stop offset="0%" stopColor="#FFFFFF" />
+          <stop offset="32%" stopColor="#F7F1E3" />
+          <stop offset="68%" stopColor="#D9C8A8" />
+          <stop offset="100%" stopColor="#8E7556" />
+        </linearGradient>
+        <linearGradient id="chess-obsidian-metal" x1="8%" y1="5%" x2="92%" y2="100%">
+          <stop offset="0%" stopColor="#8C7764" />
+          <stop offset="30%" stopColor="#3B2A21" />
+          <stop offset="72%" stopColor="#1B120E" />
+          <stop offset="100%" stopColor="#080605" />
+        </linearGradient>
+      </defs>
       {type === 'p' && (
         <path
           d="M22.5 9a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm-4 10.5c-2.2 2-3.5 5-3.5 8h15c0-3-1.3-6-3.5-8h-8zm-5 10.5h18v5h-18v-5z"
