@@ -262,7 +262,7 @@ export function BackgammonBoard({
     <div className="arena-layout">
       <div className="arena-board-col">
         <BoardPerspectiveStage className="arena-wide-board">
-          <div className="rounded-2xl bg-[#3c2313] p-2 sm:p-3 border-2 border-[#d4af37]/60 shadow-2xl">
+          <div className="boardora-3d-board rounded-2xl bg-[#3c2313] p-2 sm:p-3 border-2 border-[#d4af37]/60 shadow-2xl">
             <svg
               viewBox="0 0 546 380"
               className="w-full h-auto block select-none"
