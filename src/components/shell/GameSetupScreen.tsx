@@ -256,7 +256,7 @@ export function GameSetupScreen({
   };
 
   return (
-    <div className="max-w-5xl space-y-6">
+    <div className="game-setup-shell max-w-5xl space-y-6">
       <div className="flex items-center justify-between gap-4">
         <button
           type="button"
@@ -393,7 +393,7 @@ export function GameSetupScreen({
               <span className="block text-xs font-semibold tracking-wider text-[var(--cp-text-muted)] mb-2.5">
                 AI DIFFICULTY
               </span>
-              <div className="inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
+              <div className="boardora-setup-control inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
                 {(['easy', 'medium', 'hard'] as const).map((tier) => (
                   <button
                     key={tier}
@@ -420,7 +420,7 @@ export function GameSetupScreen({
               <span className="block text-xs font-semibold tracking-wider text-[var(--cp-text-muted)] mb-2.5">
                 TABLE SEATS
               </span>
-              <div className="inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
+              <div className="boardora-setup-control inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
                 {playerCountOptions.map((count) => (
                   <button
                     key={count}
@@ -448,7 +448,7 @@ export function GameSetupScreen({
               <span className="block text-xs font-semibold tracking-wider text-[var(--cp-text-muted)] mb-2.5">
                 SQUARE 100 FINISH RULE
               </span>
-              <div className="inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
+              <div className="boardora-setup-control inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
                 {[
                   { id: 'standard', label: 'Exact Roll' },
                   { id: 'bounce', label: 'Bounce Back' },
@@ -475,7 +475,7 @@ export function GameSetupScreen({
               <span className="block text-xs font-semibold tracking-wider text-[var(--cp-text-muted)] mb-2.5">
                 CAPTURE RULESET
               </span>
-              <div className="inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
+              <div className="boardora-setup-control inline-flex p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
                 {[
                   { id: 'standard', label: 'Mandatory Captures' },
                   { id: 'casual', label: 'Casual Captures' },
@@ -502,7 +502,7 @@ export function GameSetupScreen({
               <span className="block text-xs font-semibold tracking-wider text-[var(--cp-text-muted)] mb-2.5">
                 BOARD LAYOUT
               </span>
-              <div className="inline-flex flex-wrap p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
+              <div className="boardora-setup-control inline-flex flex-wrap p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
                 {[
                   { id: 'english', label: 'English Cross (33)' },
                   { id: 'european', label: 'European (37)' },
@@ -530,7 +530,7 @@ export function GameSetupScreen({
               <span className="block text-xs font-semibold tracking-wider text-[var(--cp-text-muted)] mb-2.5">
                 ECONOMY WIN RULE
               </span>
-              <div className="inline-flex flex-wrap p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
+              <div className="boardora-setup-control inline-flex flex-wrap p-1 rounded-xl bg-[var(--cp-surface)] gap-1">
                 {[
                   { id: 'standard', label: '¢5,000 Net Worth Target' },
                   { id: 'sprint', label: '10-Round Sprint' },
