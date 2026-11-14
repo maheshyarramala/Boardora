@@ -154,6 +154,6 @@ BOARDORA can use **Firebase Authentication** (Google Sign-In) and **Firestore** 
 
 ## CI / CD Workflows
 
-- `.github/workflows/ci.yml`: Runs on pushes and pull requests (`npm ci`, Firestore rules lint, TypeScript check, Vitest unit suite, Vite build).
+- `.github/workflows/ci.yml`: Runs on pushes and pull requests (`npm install --no-audit --no-fund`, Firestore rules lint, TypeScript check, Vitest unit suite, Vite build).
 - `.github/workflows/android-build.yml`: Runs on pushes, pull requests, and manual dispatch; builds the Capacitor Android Debug APK with npm + Gradle caching and uploads `boardora-debug-apk`.
 - `.github/workflows/release.yml`: Triggered by `v*` tags; enforces all quality gates and builds signed release `.apk` and `.aab` packages using GitHub Actions secrets.
