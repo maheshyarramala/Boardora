@@ -57,7 +57,7 @@ describe('Stage 11: Capacitor Android, Workflows & Offline Platform Bridge', () 
       'utf8'
     );
 
-    expect(ci).toContain('npm ci');
+    expect(ci).toContain('npm install --no-audit --no-fund');
     expect(ci).toContain('npm run lint');
     expect(ci).toContain('npm test');
     expect(ci).toContain('npm run build');
@@ -66,6 +66,7 @@ describe('Stage 11: Capacitor Android, Workflows & Offline Platform Bridge', () 
     expect(androidBuild).toContain('./gradlew assembleDebug');
     expect(androidBuild).toContain('actions/upload-artifact@v4');
 
+    expect(release).toContain('npm install --no-audit --no-fund');
     expect(release).toContain("- 'v*'");
     expect(release).toContain('secrets.ANDROID_KEYSTORE_BASE64');
     expect(release).toContain('secrets.ANDROID_KEYSTORE_PASSWORD');
