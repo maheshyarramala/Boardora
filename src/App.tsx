@@ -11,6 +11,7 @@ import { getCatalogEntry, type GameCatalogEntry } from './core/catalog';
 import type { ActiveSession } from './core/types';
 import { registerBuiltEngines } from './engines/registerBuiltEngines';
 import { audioEngine } from './platform/audio';
+import { initializeBoardoraAds } from './monetization/ads';
 
 registerBuiltEngines();
 import {
@@ -42,6 +43,7 @@ function BoardoraShell() {
   useEffect(() => {
     if (ready) {
       void initializeCapacitorNativeShell();
+      void initializeBoardoraAds();
     }
   }, [ready]);
 
