@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" fill="none">
+  <rect width="320" height="180" rx="14" fill="#08172F"/>
+  <rect x="8" y="8" width="304" height="164" rx="10" stroke="#D6AD55" stroke-opacity="0.22" stroke-width="1.2"/>
+  <g transform="translate(32 24)">
+    <rect width="256" height="132" rx="12" fill="#14233C" stroke="#D6AD55" stroke-width="1.6"/>
+    <line x1="16" y1="46" x2="240" y2="46" stroke="#F4EBDD" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="12 10"/>
+    <line x1="16" y1="86" x2="240" y2="86" stroke="#F4EBDD" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="12 10"/>
+    <!-- Checkered Finish Strip -->
+    <rect x="218" y="10" width="12" height="112" fill="#F4EBDD" fill-opacity="0.22"/>
+    <!-- Player Cars -->
+    <rect x="52" y="18" width="42" height="20" rx="6" fill="#D94343" stroke="#F4EBDD" stroke-width="1.5"/>
+    <rect x="116" y="56" width="42" height="20" rx="6" fill="#2865C7" stroke="#F4EBDD" stroke-width="1.5"/>
+    <!-- Fuel Station -->
+    <rect x="164" y="95" width="26" height="22" rx="5" fill="#269C68" stroke="#F4EBDD" stroke-width="1.2"/>
+  </g>
+</svg>

@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" fill="none">
+  <defs>
+    <radialGradient id="stageGlow" cx="55%" cy="46%" r="55%">
+      <stop offset="0%" stop-color="#D6AD55" stop-opacity="0.24"/>
+      <stop offset="65%" stop-color="#2865C7" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#08172F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="walnutDeck" x1="80" y1="210" x2="560" y2="390" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5B3A29"/>
+      <stop offset="50%" stop-color="#3F261A"/>
+      <stop offset="100%" stop-color="#27160E"/>
+    </linearGradient>
+    <linearGradient id="goldPiece" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF0BC"/>
+      <stop offset="45%" stop-color="#D6AD55"/>
+      <stop offset="100%" stop-color="#9B712D"/>
+    </linearGradient>
+    <linearGradient id="whiteDieTop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F4EBDD"/>
+    </linearGradient>
+    <linearGradient id="whiteDieSide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E6DCCB"/>
+      <stop offset="100%" stop-color="#C8BAA2"/>
+    </linearGradient>
+    <radialGradient id="redPawn" cx="35%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#F99797"/>
+      <stop offset="45%" stop-color="#D94343"/>
+      <stop offset="100%" stop-color="#7B1E1E"/>
+    </radialGradient>
+    <radialGradient id="greenPawn" cx="35%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#85E0B5"/>
+      <stop offset="45%" stop-color="#269C68"/>
+      <stop offset="100%" stop-color="#114C32"/>
+    </radialGradient>
+    <radialGradient id="bluePawn" cx="35%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#8CB5F6"/>
+      <stop offset="45%" stop-color="#2865C7"/>
+      <stop offset="100%" stop-color="#13336A"/>
+    </radialGradient>
+    <radialGradient id="goldPawn" cx="35%" cy="28%" r="70%">
+      <stop offset="0%" stop-color="#FFF0BC"/>
+      <stop offset="45%" stop-color="#D6AD55"/>
+      <stop offset="100%" stop-color="#7D581B"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="640" height="420" rx="24" fill="#08172F"/>
+  <rect width="640" height="420" rx="24" fill="url(#stageGlow)"/>
+
+  <!-- 3D Perspective Polished Walnut & Marble Chessboard Surface -->
+  <g>
+    <polygon points="94,258 320,174 546,258 320,368" fill="#040B16" fill-opacity="0.72"/>
+    <!-- Wood Rim Thickness -->
+    <polygon points="100,248 320,350 320,366 100,264" fill="#2A1810" stroke="#9B712D" stroke-opacity="0.4" stroke-width="1"/>
+    <polygon points="540,248 320,350 320,366 540,264" fill="#1D100A" stroke="#9B712D" stroke-opacity="0.3" stroke-width="1"/>
+    <!-- Board Top -->
+    <polygon points="100,248 320,164 540,248 320,350" fill="url(#walnutDeck)" stroke="#D6AD55" stroke-width="2.2"/>
+    <!-- Inlaid Chess Squares -->
+    <g opacity="0.92">
+      <polygon points="196,246 258,219 320,246 258,274" fill="#F4EBDD"/>
+      <polygon points="320,246 382,219 444,246 382,274" fill="#0D2144"/>
+      <polygon points="258,219 320,192 382,219 320,246" fill="#0D2144"/>
+      <polygon points="258,274 320,246 382,274 320,302" fill="#0D2144"/>
+      <polygon points="138,246 196,220 258,246 196,274" fill="#0D2144"/>
+      <polygon points="382,246 444,220 502,246 444,274" fill="#F4EBDD"/>
+      <polygon points="258,274 320,302 258,330 196,302" fill="#F4EBDD"/>
+      <polygon points="382,274 444,302 382,330 320,302" fill="#F4EBDD"/>
+    </g>
+    <polygon points="134,248 320,176 506,248 320,334" stroke="#D6AD55" stroke-opacity="0.55" stroke-width="1.4" fill="none"/>
+  </g>
+
+  <!-- Golden Royal King Piece (Left Back) -->
+  <g transform="translate(212 114)">
+    <ellipse cx="42" cy="140" rx="28" ry="10" fill="#000000" fill-opacity="0.45"/>
+    <ellipse cx="42" cy="134" rx="26" ry="8" fill="#9B712D" stroke="#F6DF96" stroke-width="1.2"/>
+    <path d="M22 130C24 102 30 74 32 54H52C54 74 60 102 62 130H22Z" fill="url(#goldPiece)"/>
+    <ellipse cx="42" cy="54" rx="14" ry="5" fill="#F6DF96"/>
+    <path d="M28 48C26 36 32 28 42 28C52 28 58 36 56 48H28Z" fill="url(#goldPiece)"/>
+    <path d="M39 10H45V28H39V10ZM33 16H51V21H33V16Z" fill="#FFF0BC"/>
+  </g>
+
+  <!-- Golden Royal Knight Hero Piece (Center) -->
+  <g transform="translate(274 72)">
+    <ellipse cx="52" cy="182" rx="36" ry="12" fill="#000000" fill-opacity="0.52"/>
+    <ellipse cx="52" cy="175" rx="34" ry="10" fill="#9B712D" stroke="#F6DF96" stroke-width="1.4"/>
+    <ellipse cx="52" cy="166" rx="28" ry="8" fill="url(#goldPiece)"/>
+    <path d="M26 164C26 134 38 110 52 96C34 92 22 79 20 64C18 48 30 34 48 28L54 14L68 24C84 26 98 42 101 66C104 92 92 122 80 140C86 148 90 156 90 164H26Z" fill="url(#goldPiece)" stroke="#FFF0BC" stroke-opacity="0.45" stroke-width="1.2"/>
+    <path d="M68 36C82 44 92 60 91 84C90 98 83 112 75 122" stroke="#5D3E11" stroke-width="4" stroke-linecap="round" stroke-opacity="0.55"/>
+    <circle cx="46" cy="48" r="3.4" fill="#08172F"/>
+  </g>
+
+  <!-- White 3D Die with Black Pips (Front Right) -->
+  <g transform="translate(384 226)">
+    <ellipse cx="42" cy="82" rx="38" ry="13" fill="#000000" fill-opacity="0.5"/>
+    <!-- Isometric Cube -->
+    <polygon points="42,6 78,24 42,42 6,24" fill="url(#whiteDieTop)" stroke="#E5DAC5" stroke-width="1.2"/>
+    <polygon points="6,24 42,42 42,78 6,60" fill="#EAE0CE" stroke="#C9BCA4" stroke-width="1"/>
+    <polygon points="78,24 42,42 42,78 78,60" fill="url(#whiteDieSide)" stroke="#B8AA90" stroke-width="1"/>
+    <!-- Top face pips (5) -->
+    <ellipse cx="42" cy="24" rx="4.2" ry="2.4" fill="#08172F"/>
+    <ellipse cx="26" cy="24" rx="3.8" ry="2.1" fill="#08172F"/>
+    <ellipse cx="58" cy="24" rx="3.8" ry="2.1" fill="#08172F"/>
+    <ellipse cx="42" cy="15" rx="3.8" ry="2.1" fill="#08172F"/>
+    <ellipse cx="42" cy="33" rx="3.8" ry="2.1" fill="#08172F"/>
+    <!-- Left face pips (3) -->
+    <circle cx="17" cy="39" r="3.2" fill="#08172F"/>
+    <circle cx="24" cy="49" r="3.2" fill="#08172F"/>
+    <circle cx="31" cy="59" r="3.2" fill="#08172F"/>
+    <!-- Right face pips (2) -->
+    <circle cx="53" cy="59" r="3.2" fill="#08172F"/>
+    <circle cx="67" cy="41" r="3.2" fill="#08172F"/>
+  </g>
+
+  <!-- Second White 3D Die (Left Front) -->
+  <g transform="translate(154 246) scale(0.76)">
+    <ellipse cx="42" cy="82" rx="38" ry="13" fill="#000000" fill-opacity="0.48"/>
+    <polygon points="42,6 78,24 42,42 6,24" fill="url(#whiteDieTop)" stroke="#E5DAC5" stroke-width="1.2"/>
+    <polygon points="6,24 42,42 42,78 6,60" fill="#EAE0CE" stroke="#C9BCA4" stroke-width="1"/>
+    <polygon points="78,24 42,42 42,78 78,60" fill="url(#whiteDieSide)" stroke="#B8AA90" stroke-width="1"/>
+    <ellipse cx="42" cy="24" rx="4.8" ry="2.8" fill="#08172F"/>
+    <circle cx="18" cy="40" r="3.2" fill="#08172F"/>
+    <circle cx="30" cy="58" r="3.2" fill="#08172F"/>
+    <circle cx="53" cy="59" r="3.2" fill="#08172F"/>
+    <circle cx="67" cy="41" r="3.2" fill="#08172F"/>
+  </g>
+
+  <!-- Four Glossy Ludo Pawns in Official Player Colors -->
+  <!-- Classic Red Pawn -->
+  <g transform="translate(122 196)">
+    <ellipse cx="22" cy="64" rx="16" ry="5" fill="#000" fill-opacity="0.48"/>
+    <path d="M8 60C8 55 14 52 22 52C30 52 36 55 36 60C36 63 30 65 22 65C14 65 8 63 8 60Z" fill="url(#redPawn)"/>
+    <path d="M12 56L17 31H27L32 56H12Z" fill="url(#redPawn)"/>
+    <circle cx="22" cy="22" r="10.5" fill="url(#redPawn)"/>
+    <ellipse cx="18.5" cy="18" rx="3.8" ry="2.1" transform="rotate(-24 18.5 18)" fill="#FFFFFF" fill-opacity="0.72"/>
+  </g>
+
+  <!-- Emerald Green Pawn -->
+  <g transform="translate(466 196)">
+    <ellipse cx="22" cy="64" rx="16" ry="5" fill="#000" fill-opacity="0.48"/>
+    <path d="M8 60C8 55 14 52 22 52C30 52 36 55 36 60C36 63 30 65 22 65C14 65 8 63 8 60Z" fill="url(#greenPawn)"/>
+    <path d="M12 56L17 31H27L32 56H12Z" fill="url(#greenPawn)"/>
+    <circle cx="22" cy="22" r="10.5" fill="url(#greenPawn)"/>
+    <ellipse cx="18.5" cy="18" rx="3.8" ry="2.1" transform="rotate(-24 18.5 18)" fill="#FFFFFF" fill-opacity="0.72"/>
+  </g>
+
+  <!-- Royal Blue Pawn -->
+  <g transform="translate(492 238) scale(0.92)">
+    <ellipse cx="22" cy="64" rx="16" ry="5" fill="#000" fill-opacity="0.48"/>
+    <path d="M8 60C8 55 14 52 22 52C30 52 36 55 36 60C36 63 30 65 22 65C14 65 8 63 8 60Z" fill="url(#bluePawn)"/>
+    <path d="M12 56L17 31H27L32 56H12Z" fill="url(#bluePawn)"/>
+    <circle cx="22" cy="22" r="10.5" fill="url(#bluePawn)"/>
+    <ellipse cx="18.5" cy="18" rx="3.8" ry="2.1" transform="rotate(-24 18.5 18)" fill="#FFFFFF" fill-opacity="0.72"/>
+  </g>
+
+  <!-- Royal Gold Pawn -->
+  <g transform="translate(268 278) scale(0.9)">
+    <ellipse cx="22" cy="64" rx="16" ry="5" fill="#000" fill-opacity="0.48"/>
+    <path d="M8 60C8 55 14 52 22 52C30 52 36 55 36 60C36 63 30 65 22 65C14 65 8 63 8 60Z" fill="url(#goldPawn)"/>
+    <path d="M12 56L17 31H27L32 56H12Z" fill="url(#goldPawn)"/>
+    <circle cx="22" cy="22" r="10.5" fill="url(#goldPawn)"/>
+    <ellipse cx="18.5" cy="18" rx="3.8" ry="2.1" transform="rotate(-24 18.5 18)" fill="#FFFFFF" fill-opacity="0.72"/>
+  </g>
+</svg>

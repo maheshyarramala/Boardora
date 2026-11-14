@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" fill="none">
+  <rect width="320" height="180" rx="14" fill="#08172F"/>
+  <rect x="8" y="8" width="304" height="164" rx="10" stroke="#D6AD55" stroke-opacity="0.22" stroke-width="1.2"/>
+  <g transform="translate(52 20)">
+    <rect width="216" height="140" rx="10" fill="#174D3A" stroke="#5E3A28" stroke-width="6"/>
+    <rect x="104" y="4" width="8" height="132" fill="#462A1D"/>
+    <!-- Points -->
+    <polygon points="16,8 26,64 36,8" fill="#F4EBDD"/>
+    <polygon points="37,8 47,64 57,8" fill="#D94343"/>
+    <polygon points="58,8 68,64 78,8" fill="#F4EBDD"/>
+    <polygon points="79,8 89,64 99,8" fill="#D94343"/>
+    <polygon points="120,132 130,76 140,132" fill="#D94343"/>
+    <polygon points="141,132 151,76 161,132" fill="#F4EBDD"/>
+    <polygon points="162,132 172,76 182,132" fill="#D94343"/>
+    <polygon points="183,132 193,76 203,132" fill="#F4EBDD"/>
+    <!-- Checkers & White Die -->
+    <circle cx="26" cy="116" r="7" fill="#F4EBDD" stroke="#08172F" stroke-width="1.4"/>
+    <circle cx="26" cy="101" r="7" fill="#F4EBDD" stroke="#08172F" stroke-width="1.4"/>
+    <circle cx="130" cy="24" r="7" fill="#182235" stroke="#D6AD55" stroke-width="1.5"/>
+    <rect x="164" y="57" width="20" height="20" rx="4" fill="#FFFFFF" stroke="#D6AD55" stroke-width="1"/>
+    <circle cx="174" cy="67" r="2.3" fill="#08172F"/>
+  </g>
+</svg>

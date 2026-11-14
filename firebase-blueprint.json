@@ -1,0 +1,414 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated player profile, XP level, preferences, and privacy consent.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schemaVersion": {
+          "type": "integer"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 32
+        },
+        "avatarId": {
+          "type": "string",
+          "enum": [
+            "royal-knight",
+            "golden-crown",
+            "compass-rose",
+            "emerald-dice",
+            "ruby-rook",
+            "sapphire-wheel"
+          ]
+        },
+        "authType": {
+          "type": "string",
+          "enum": ["google"]
+        },
+        "xp": {
+          "type": "integer"
+        },
+        "level": {
+          "type": "integer"
+        },
+        "preferences": {
+          "type": "object",
+          "description": "PlayerPreferences native map (audio, theme, language, accessibility)"
+        },
+        "privacyConsent": {
+          "type": "object",
+          "description": "PrivacyConsent native map"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "schemaVersion",
+        "displayName",
+        "avatarId",
+        "authType",
+        "xp",
+        "level",
+        "preferences",
+        "privacyConsent",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "MatchRecord": {
+      "title": "MatchRecord",
+      "description": "Completed match record persisted under an authenticated user's ledger.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schemaVersion": { "type": "integer" },
+        "matchId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "gameId": {
+          "type": "string",
+          "enum": [
+            "ludo",
+            "chess",
+            "snakes_ladders",
+            "travel_game",
+            "peg_solitaire",
+            "nine_mens_morris",
+            "checkers",
+            "backgammon",
+            "drive_your_car",
+            "money_game"
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["ai", "local", "practice", "online"]
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"]
+        },
+        "outcome": {
+          "type": "string",
+          "enum": ["win", "loss", "draw"]
+        },
+        "opponentLabel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "movesCount": { "type": "integer" },
+        "durationMs": { "type": "integer" },
+        "xpAwarded": { "type": "integer" },
+        "score": { "type": "integer" },
+        "completedAt": { "type": "integer" },
+        "serverSignature": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId",
+        "schemaVersion",
+        "matchId",
+        "gameId",
+        "mode",
+        "outcome",
+        "opponentLabel",
+        "movesCount",
+        "durationMs",
+        "xpAwarded",
+        "completedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ActiveSession": {
+      "title": "ActiveSession",
+      "description": "In-progress recoverable tabletop session saved as a native Firestore map.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schemaVersion": { "type": "integer" },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "gameId": {
+          "type": "string",
+          "enum": [
+            "ludo",
+            "chess",
+            "snakes_ladders",
+            "travel_game",
+            "peg_solitaire",
+            "nine_mens_morris",
+            "checkers",
+            "backgammon",
+            "drive_your_car",
+            "money_game"
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["ai", "local", "practice", "online"]
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"]
+        },
+        "playerCount": { "type": "integer" },
+        "seed": { "type": "integer" },
+        "stateMap": {
+          "type": "object",
+          "description": "Firestore-safe native map encoding engine state without nested arrays"
+        },
+        "actionCount": { "type": "integer" },
+        "elapsedMs": { "type": "integer" },
+        "localUpdatedAt": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId",
+        "schemaVersion",
+        "sessionId",
+        "gameId",
+        "mode",
+        "difficulty",
+        "playerCount",
+        "seed",
+        "stateMap",
+        "actionCount",
+        "elapsedMs",
+        "localUpdatedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UnlockedAchievement": {
+      "title": "UnlockedAchievement",
+      "description": "Unlocked achievement badge under an authenticated user.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schemaVersion": { "type": "integer" },
+        "achievementId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "unlockedAt": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId",
+        "schemaVersion",
+        "achievementId",
+        "unlockedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DailyChallenge": {
+      "title": "DailyChallenge",
+      "description": "Deterministic daily challenge state synced per UTC date.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "schemaVersion": { "type": "integer" },
+        "dateKey": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 16,
+          "pattern": "^[0-9\\-]+$"
+        },
+        "gameId": { "type": "string", "maxLength": 40 },
+        "targetMode": { "type": "string", "enum": ["ai", "local", "practice", "online"] },
+        "objectiveType": {
+          "type": "string",
+          "enum": ["win_match", "complete_match", "win_under_moves"]
+        },
+        "targetValue": { "type": "integer" },
+        "xpReward": { "type": "integer" },
+        "completed": { "type": "boolean" },
+        "completedAt": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ownerId",
+        "schemaVersion",
+        "dateKey",
+        "gameId",
+        "targetMode",
+        "objectiveType",
+        "targetValue",
+        "xpReward",
+        "completed",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Room": {
+      "title": "Room",
+      "description": "Private online multiplayer room metadata and seat roster.",
+      "type": "object",
+      "properties": {
+        "roomCode": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 12,
+          "pattern": "^[A-Z0-9]+$"
+        },
+        "hostUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "gameId": { "type": "string", "maxLength": 40 },
+        "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"] },
+        "maxPlayers": { "type": "integer" },
+        "status": {
+          "type": "string",
+          "enum": ["waiting", "active", "finished"]
+        },
+        "seatUids": {
+          "type": "array",
+          "description": "Bounded list (max 4) of Firebase UIDs seated at the table."
+        },
+        "readyUids": {
+          "type": "array",
+          "description": "Bounded list (max 4) of ready Firebase UIDs."
+        },
+        "version": { "type": "integer" },
+        "winnerUid": { "type": "string", "maxLength": 128 },
+        "authoritativeReceipt": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "roomCode",
+        "hostUid",
+        "gameId",
+        "difficulty",
+        "maxPlayers",
+        "status",
+        "seatUids",
+        "readyUids",
+        "version",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RoomAction": {
+      "title": "RoomAction",
+      "description": "Authoritative move audit entry bound to an online room.",
+      "type": "object",
+      "properties": {
+        "roomCode": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 12,
+          "pattern": "^[A-Z0-9]+$"
+        },
+        "actorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "seq": { "type": "integer" },
+        "actionType": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "payloadMap": { "type": "object" },
+        "serverSignature": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "roomCode",
+        "actorUid",
+        "seq",
+        "actionType",
+        "payloadMap",
+        "serverSignature",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Owner-only authenticated player profile document."
+    },
+    "/users/{userId}/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/MatchRecord" },
+      "description": "Immutable completed match records owned by the user."
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": { "$ref": "#/entities/ActiveSession" },
+      "description": "In-progress recoverable match sessions synced across devices."
+    },
+    "/users/{userId}/achievements/{achievementId}": {
+      "schema": { "$ref": "#/entities/UnlockedAchievement" },
+      "description": "Unlocked achievement records owned by the user."
+    },
+    "/users/{userId}/dailyChallenges/{dateKey}": {
+      "schema": { "$ref": "#/entities/DailyChallenge" },
+      "description": "Daily challenge progress keyed by UTC date."
+    },
+    "/rooms/{roomCode}": {
+      "schema": { "$ref": "#/entities/Room" },
+      "description": "Private online multiplayer room metadata."
+    },
+    "/rooms/{roomCode}/actions/{actionId}": {
+      "schema": { "$ref": "#/entities/RoomAction" },
+      "description": "Ordered room action audit entries under parent room Master Gate."
+    }
+  }
+}

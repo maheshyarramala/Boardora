@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verify:
+    name: Lint, TypeScript, Unit Tests & Web Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22 (Capacitor 6 LTS runtime)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run Firestore Security Rules Lint
+        run: npm run lint:rules
+
+      - name: Run TypeScript Strict Checks
+        run: npm run lint
+
+      - name: Run Complete Unit Test Suite
+        run: npm test
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Write CI Build Summary
+        if: success()
+        run: |
+          {
+            echo "### BOARDORA — Web CI Summary"
+            echo "- **Rules Lint**: Passed (\`eslint firestore.rules\`)"
+            echo "- **TypeScript**: Passed (\`tsc --noEmit\`)"
+            echo "- **Unit Tests**: Passed (\`vitest run\`)"
+            echo "- **Production Bundle**: Built to \`dist/\`"
+          } >> "$GITHUB_STEP_SUMMARY"

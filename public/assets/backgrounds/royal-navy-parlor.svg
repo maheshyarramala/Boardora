@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <radialGradient id="ambientGold1" cx="78%" cy="22%" r="48%">
+      <stop offset="0%" stop-color="#D6AD55" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#9B712D" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#08172F" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="ambientGold2" cx="18%" cy="78%" r="45%">
+      <stop offset="0%" stop-color="#D6AD55" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#08172F" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="faintChess" width="120" height="120" patternUnits="userSpaceOnUse">
+      <rect width="60" height="60" fill="#F4EBDD" fill-opacity="0.018"/>
+      <rect x="60" y="60" width="60" height="60" fill="#F4EBDD" fill-opacity="0.018"/>
+      <path d="M120 0H0V120" stroke="#D6AD55" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="#08172F"/>
+  <rect width="1200" height="800" fill="url(#faintChess)"/>
+  <rect width="1200" height="800" fill="url(#ambientGold1)"/>
+  <rect width="1200" height="800" fill="url(#ambientGold2)"/>
+  <!-- Subtle Geometric Diamond Lattice -->
+  <path d="M600 80L1040 400L600 720L160 400Z" stroke="#D6AD55" stroke-opacity="0.07" stroke-width="1.2"/>
+  <path d="M600 140L960 400L600 660L240 400Z" stroke="#D6AD55" stroke-opacity="0.045" stroke-width="1"/>
+  <!-- Quiet Gold Ambient Particles -->
+  <circle cx="940" cy="140" r="2.2" fill="#D6AD55" fill-opacity="0.45"/>
+  <circle cx="1010" cy="210" r="1.4" fill="#F4EBDD" fill-opacity="0.35"/>
+  <circle cx="880" cy="240" r="1.8" fill="#D6AD55" fill-opacity="0.3"/>
+  <circle cx="1080" cy="310" r="2" fill="#D6AD55" fill-opacity="0.28"/>
+  <circle cx="220" cy="610" r="1.8" fill="#D6AD55" fill-opacity="0.32"/>
+  <circle cx="160" cy="520" r="1.4" fill="#F4EBDD" fill-opacity="0.25"/>
+  <circle cx="760" cy="680" r="1.6" fill="#D6AD55" fill-opacity="0.26"/>
+</svg>

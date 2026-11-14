@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 128" fill="none">
+  <defs>
+    <linearGradient id="pBgNavy" x1="12" y1="8" x2="116" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10274D"/>
+      <stop offset="60%" stop-color="#08172F"/>
+      <stop offset="100%" stop-color="#040D1C"/>
+    </linearGradient>
+    <linearGradient id="pRoyalGold" x1="28" y1="16" x2="100" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F6DF96"/>
+      <stop offset="45%" stop-color="#D6AD55"/>
+      <stop offset="100%" stop-color="#9B712D"/>
+    </linearGradient>
+    <linearGradient id="pWordGold" x1="146" y1="26" x2="510" y2="76" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F6DF96"/>
+      <stop offset="50%" stop-color="#D6AD55"/>
+      <stop offset="100%" stop-color="#E7C473"/>
+    </linearGradient>
+  </defs>
+  <!-- Emblem -->
+  <path d="M64 8L108 24V63C108 89.5 89 108.5 64 118C39 108.5 20 89.5 20 63V24L64 8Z" fill="url(#pBgNavy)" stroke="url(#pRoyalGold)" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 15L101 28.5V62.5C101 84.5 85 101 64 109.5C43 101 27 84.5 27 62.5V28.5L64 15Z" stroke="#D6AD55" stroke-opacity="0.32" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M47 35.5L44.5 25L55 30L64 22L73 30L83.5 25L81 35.5H47Z" fill="url(#pRoyalGold)"/>
+  <circle cx="44.5" cy="23.5" r="2.2" fill="#F6DF96"/>
+  <circle cx="64" cy="20" r="2.6" fill="#F6DF96"/>
+  <circle cx="83.5" cy="23.5" r="2.2" fill="#F6DF96"/>
+  <path d="M41 90.5H87V97H41V90.5Z" fill="url(#pRoyalGold)"/>
+  <path d="M44 85H84V88.5H44V85Z" fill="#9B712D"/>
+  <path d="M46 83.5C46 73 51.5 66 57.5 61.5L50 61.5L42 58.5L41 53.5L52 44.5L54.5 38L59.5 42.5L64 38L66.5 41.5C76 43 84 51 85.5 63.5C86.5 72 83 78.5 81.5 83.5H46Z" fill="url(#pRoyalGold)"/>
+  <path d="M68 45.5C74.5 48.5 79 55 79.5 64.5" stroke="#08172F" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.52"/>
+  <path d="M52.5 48.2L55.8 46.8L56.8 49L53.5 49.8Z" fill="#08172F"/>
+  <!-- Typography Lockup -->
+  <text x="136" y="70" fill="url(#pWordGold)" font-family="Cinzel, Georgia, serif" font-size="52" font-weight="700" letter-spacing="5">BOARDORA</text>
+  <line x1="138" y1="84" x2="508" y2="84" stroke="#D6AD55" stroke-opacity="0.35" stroke-width="1"/>
+  <text x="138" y="103" fill="#F4EBDD" fill-opacity="0.88" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="13.5" font-weight="600" letter-spacing="3.2">ONE WORLD. TEN GAMES. ENDLESS FUN.</text>
+</svg>

@@ -1,0 +1,6 @@
+{
+  "name": "BOARDORA",
+  "description": "One World. Ten Games. Endless Fun. A luxury 10-in-1 tabletop board game collection with offline play, smart AI, local multiplayer, and progression.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

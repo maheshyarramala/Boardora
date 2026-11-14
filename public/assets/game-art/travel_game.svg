@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" fill="none">
+  <rect width="320" height="180" rx="14" fill="#08172F"/>
+  <rect x="8" y="8" width="304" height="164" rx="10" stroke="#D6AD55" stroke-opacity="0.22" stroke-width="1.2"/>
+  <rect x="26" y="20" width="268" height="140" rx="10" fill="#10254A" stroke="#D6AD55" stroke-opacity="0.45" stroke-width="1.4"/>
+  <!-- Stylized Continent Silhouettes -->
+  <path d="M48 64C64 46 92 48 108 66C116 74 96 98 84 114C66 118 46 90 48 64Z" fill="#269C68" fill-opacity="0.28"/>
+  <path d="M142 52C176 42 222 50 248 76C258 88 240 124 212 126C184 128 148 104 142 52Z" fill="#2865C7" fill-opacity="0.32"/>
+  <!-- Gold Route Line -->
+  <path d="M56 122C94 64 146 52 186 88C218 118 248 92 272 52" stroke="#D6AD55" stroke-width="2.6" stroke-dasharray="6 5"/>
+  <circle cx="56" cy="122" r="7.5" fill="#2865C7" stroke="#F4EBDD" stroke-width="2"/>
+  <circle cx="122" cy="68" r="7.5" fill="#D6AD55" stroke="#08172F" stroke-width="2"/>
+  <circle cx="196" cy="96" r="7.5" fill="#269C68" stroke="#F4EBDD" stroke-width="2"/>
+  <circle cx="272" cy="52" r="9" fill="#D94343" stroke="#F4EBDD" stroke-width="2"/>
+  <!-- Brass Compass Rose -->
+  <g transform="translate(228 106)">
+    <circle cx="24" cy="24" r="20" stroke="#D6AD55" stroke-opacity="0.45" stroke-width="1.5"/>
+    <path d="M24 6L28 20L42 24L28 28L24 42L20 28L6 24L20 20L24 6Z" fill="#D6AD55"/>
+  </g>
+</svg>

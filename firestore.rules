@@ -1,0 +1,628 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Hardened Primitives
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn()
+        && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isVerifiedUser() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string
+        && id.size() >= 1
+        && id.size() <= 128
+        && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidRoomCode(code) {
+      return code is string
+        && code.size() >= 6
+        && code.size() <= 12
+        && code.matches('^[A-Z0-9]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidGameId(gameId) {
+      return gameId in [
+        'ludo',
+        'chess',
+        'snakes_ladders',
+        'travel_game',
+        'peg_solitaire',
+        'nine_mens_morris',
+        'checkers',
+        'backgammon',
+        'drive_your_car',
+        'money_game'
+      ];
+    }
+
+    function isValidMode(mode) {
+      return mode in ['ai', 'local', 'practice', 'online'];
+    }
+
+    function isValidDifficulty(diff) {
+      return diff in ['easy', 'medium', 'hard'];
+    }
+
+    function isValidAvatarId(avatarId) {
+      return avatarId in [
+        'royal-knight',
+        'golden-crown',
+        'compass-rose',
+        'emerald-dice',
+        'ruby-rook',
+        'sapphire-wheel'
+      ];
+    }
+
+    // 3. Entity Validation Helpers
+    function isValidPreferences(prefs) {
+      return prefs is map
+        && prefs.keys().hasAll([
+          'soundEnabled',
+          'soundVolume',
+          'musicEnabled',
+          'musicVolume',
+          'sfxVolume',
+          'hapticsEnabled',
+          'theme',
+          'language',
+          'accessibility'
+        ])
+        && prefs.keys().hasOnly([
+          'soundEnabled',
+          'soundVolume',
+          'musicEnabled',
+          'musicVolume',
+          'sfxVolume',
+          'hapticsEnabled',
+          'theme',
+          'language',
+          'accessibility'
+        ])
+        && prefs.soundEnabled is bool
+        && prefs.musicEnabled is bool
+        && prefs.soundVolume is number && prefs.soundVolume >= 0 && prefs.soundVolume <= 1
+        && prefs.musicVolume is number && prefs.musicVolume >= 0 && prefs.musicVolume <= 1
+        && prefs.sfxVolume is number && prefs.sfxVolume >= 0 && prefs.sfxVolume <= 1
+        && prefs.hapticsEnabled is bool
+        && prefs.theme in ['navy-gold', 'marble-light', 'emerald-felt']
+        && prefs.language in ['en', 'es', 'fr', 'hi']
+        && prefs.accessibility is map
+        && prefs.accessibility.keys().hasAll([
+          'highContrast',
+          'colorblindSymbols',
+          'largeText',
+          'reducedMotion'
+        ])
+        && prefs.accessibility.keys().hasOnly([
+          'highContrast',
+          'colorblindSymbols',
+          'largeText',
+          'reducedMotion'
+        ])
+        && prefs.accessibility.highContrast is bool
+        && prefs.accessibility.colorblindSymbols is bool
+        && prefs.accessibility.largeText is bool
+        && prefs.accessibility.reducedMotion is bool;
+    }
+
+    function isValidPrivacyConsent(consent) {
+      return consent is map
+        && consent.keys().hasAll(['analyticsEnabled', 'cloudSyncEnabled', 'consentUpdatedAt'])
+        && consent.keys().hasOnly(['analyticsEnabled', 'cloudSyncEnabled', 'consentUpdatedAt'])
+        && consent.analyticsEnabled is bool
+        && consent.cloudSyncEnabled is bool
+        && consent.consentUpdatedAt is int && consent.consentUpdatedAt >= 0;
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.keys().hasAll([
+        'uid',
+        'schemaVersion',
+        'displayName',
+        'avatarId',
+        'authType',
+        'xp',
+        'level',
+        'preferences',
+        'privacyConsent',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'uid',
+        'schemaVersion',
+        'displayName',
+        'avatarId',
+        'authType',
+        'xp',
+        'level',
+        'preferences',
+        'privacyConsent',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.uid is string
+      && data.uid == userId
+      && data.uid == request.auth.uid
+      && isValidId(data.uid)
+      && data.schemaVersion is int && data.schemaVersion >= 1 && data.schemaVersion <= 10
+      && data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 32
+      && isValidAvatarId(data.avatarId)
+      && data.authType == 'google'
+      && data.xp is int && data.xp >= 0 && data.xp <= 10000000
+      && data.level is int && data.level >= 1 && data.level <= 500
+      && isValidPreferences(data.preferences)
+      && isValidPrivacyConsent(data.privacyConsent)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidMatchRecord(data, userId, matchId) {
+      return data.keys().hasAll([
+        'ownerId',
+        'schemaVersion',
+        'matchId',
+        'gameId',
+        'mode',
+        'outcome',
+        'opponentLabel',
+        'movesCount',
+        'durationMs',
+        'xpAwarded',
+        'completedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'ownerId',
+        'schemaVersion',
+        'matchId',
+        'gameId',
+        'mode',
+        'difficulty',
+        'outcome',
+        'opponentLabel',
+        'movesCount',
+        'durationMs',
+        'xpAwarded',
+        'score',
+        'completedAt',
+        'serverSignature',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.ownerId is string && data.ownerId == userId && data.ownerId == request.auth.uid
+      && isValidId(data.ownerId)
+      && data.schemaVersion is int && data.schemaVersion >= 1 && data.schemaVersion <= 10
+      && data.matchId is string && data.matchId == matchId && isValidId(data.matchId)
+      && isValidGameId(data.gameId)
+      && isValidMode(data.mode)
+      && (!('difficulty' in data) || isValidDifficulty(data.difficulty))
+      && data.outcome in ['win', 'loss', 'draw']
+      && data.opponentLabel is string && data.opponentLabel.size() >= 1 && data.opponentLabel.size() <= 64
+      && data.movesCount is int && data.movesCount >= 0 && data.movesCount <= 50000
+      && data.durationMs is int && data.durationMs >= 0 && data.durationMs <= 86400000
+      && data.xpAwarded is int && data.xpAwarded >= 0 && data.xpAwarded <= 5000
+      && (!('score' in data) || (data.score is int && data.score >= -1000000 && data.score <= 10000000))
+      && data.completedAt is int && data.completedAt >= 0
+      && (!('serverSignature' in data) || (data.serverSignature is string && data.serverSignature.size() <= 128))
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidActiveSession(data, userId, sessionId) {
+      return data.keys().hasAll([
+        'ownerId',
+        'schemaVersion',
+        'sessionId',
+        'gameId',
+        'mode',
+        'difficulty',
+        'playerCount',
+        'seed',
+        'stateMap',
+        'actionCount',
+        'elapsedMs',
+        'localUpdatedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'ownerId',
+        'schemaVersion',
+        'sessionId',
+        'gameId',
+        'mode',
+        'difficulty',
+        'playerCount',
+        'seed',
+        'stateMap',
+        'actionCount',
+        'elapsedMs',
+        'localUpdatedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.ownerId is string && data.ownerId == userId && data.ownerId == request.auth.uid
+      && isValidId(data.ownerId)
+      && data.schemaVersion is int && data.schemaVersion >= 1 && data.schemaVersion <= 10
+      && data.sessionId is string && data.sessionId == sessionId && isValidId(data.sessionId)
+      && isValidGameId(data.gameId)
+      && isValidMode(data.mode)
+      && isValidDifficulty(data.difficulty)
+      && data.playerCount is int && data.playerCount >= 1 && data.playerCount <= 4
+      && data.seed is int && data.seed >= 0
+      && data.stateMap is map
+      && data.actionCount is int && data.actionCount >= 0 && data.actionCount <= 50000
+      && data.elapsedMs is int && data.elapsedMs >= 0 && data.elapsedMs <= 86400000
+      && data.localUpdatedAt is int && data.localUpdatedAt >= 0
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidUnlockedAchievement(data, userId, achievementId) {
+      return data.keys().hasAll([
+        'ownerId',
+        'schemaVersion',
+        'achievementId',
+        'unlockedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'ownerId',
+        'schemaVersion',
+        'achievementId',
+        'unlockedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.ownerId is string && data.ownerId == userId && data.ownerId == request.auth.uid
+      && isValidId(data.ownerId)
+      && data.schemaVersion is int && data.schemaVersion >= 1 && data.schemaVersion <= 10
+      && data.achievementId is string && data.achievementId == achievementId && isValidId(data.achievementId)
+      && data.achievementId.size() <= 64
+      && data.unlockedAt is int && data.unlockedAt >= 0
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidDailyChallenge(data, userId, dateKey) {
+      return data.keys().hasAll([
+        'ownerId',
+        'schemaVersion',
+        'dateKey',
+        'gameId',
+        'targetMode',
+        'objectiveType',
+        'targetValue',
+        'xpReward',
+        'completed',
+        'completedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'ownerId',
+        'schemaVersion',
+        'dateKey',
+        'gameId',
+        'targetMode',
+        'objectiveType',
+        'targetValue',
+        'xpReward',
+        'completed',
+        'completedAt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.ownerId is string && data.ownerId == userId && data.ownerId == request.auth.uid
+      && isValidId(data.ownerId)
+      && data.schemaVersion is int && data.schemaVersion >= 1 && data.schemaVersion <= 10
+      && data.dateKey is string && data.dateKey == dateKey
+      && data.dateKey.size() >= 10 && data.dateKey.size() <= 16
+      && data.dateKey.matches('^[0-9\\-]+$')
+      && isValidGameId(data.gameId)
+      && isValidMode(data.targetMode)
+      && data.objectiveType in ['win_match', 'complete_match', 'win_under_moves']
+      && data.targetValue is int && data.targetValue >= 1 && data.targetValue <= 500
+      && data.xpReward is int && data.xpReward >= 0 && data.xpReward <= 2000
+      && data.completed is bool
+      && (data.completedAt == null || (data.completedAt is int && data.completedAt >= 0))
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidRoom(data, roomCode) {
+      return data.keys().hasAll([
+        'roomCode',
+        'hostUid',
+        'gameId',
+        'difficulty',
+        'maxPlayers',
+        'status',
+        'seatUids',
+        'readyUids',
+        'version',
+        'createdAt',
+        'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'roomCode',
+        'hostUid',
+        'gameId',
+        'difficulty',
+        'maxPlayers',
+        'status',
+        'seatUids',
+        'readyUids',
+        'version',
+        'winnerUid',
+        'authoritativeReceipt',
+        'createdAt',
+        'updatedAt'
+      ])
+      && isValidRoomCode(data.roomCode)
+      && data.roomCode == roomCode
+      && isValidId(data.hostUid)
+      && isValidGameId(data.gameId)
+      && isValidDifficulty(data.difficulty)
+      && data.maxPlayers is int && data.maxPlayers >= 2 && data.maxPlayers <= 4
+      && data.status in ['waiting', 'active', 'finished']
+      && data.seatUids is list
+      && data.seatUids.size() >= 1
+      && data.seatUids.size() <= data.maxPlayers
+      && data.seatUids[0] is string
+      && data.readyUids is list
+      && data.readyUids.size() <= data.maxPlayers
+      && (data.readyUids.size() == 0 || data.readyUids[0] is string)
+      && data.version is int && data.version >= 0
+      && (!('winnerUid' in data) || (data.winnerUid is string && data.winnerUid.size() <= 128))
+      && (!('authoritativeReceipt' in data) || (data.authoritativeReceipt is string && data.authoritativeReceipt.size() <= 128))
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidRoomAction(data, roomCode) {
+      return data.keys().hasAll([
+        'roomCode',
+        'actorUid',
+        'seq',
+        'actionType',
+        'payloadMap',
+        'serverSignature',
+        'createdAt'
+      ])
+      && data.keys().hasOnly([
+        'roomCode',
+        'actorUid',
+        'seq',
+        'actionType',
+        'payloadMap',
+        'serverSignature',
+        'createdAt'
+      ])
+      && isValidRoomCode(data.roomCode)
+      && data.roomCode == roomCode
+      && isValidId(data.actorUid)
+      && data.actorUid == request.auth.uid
+      && data.seq is int && data.seq >= 1
+      && data.actionType is string && data.actionType.size() >= 1 && data.actionType.size() <= 40
+      && data.payloadMap is map
+      && data.serverSignature is string && data.serverSignature.size() >= 8 && data.serverSignature.size() <= 128
+      && data.createdAt is timestamp;
+    }
+
+    // 4. Collection Rules: Users & Owned Subcollections
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if isOwner(userId) && resource.data.uid == request.auth.uid;
+      allow create: if isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isOwner(userId)
+        && isValidUserProfile(incoming(), userId)
+        && incoming().uid == existing().uid
+        && incoming().authType == existing().authType
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName',
+          'avatarId',
+          'xp',
+          'level',
+          'preferences',
+          'privacyConsent',
+          'updatedAt'
+        ]);
+      allow delete: if isValidId(userId) && isOwner(userId);
+
+      match /matches/{matchId} {
+        allow get: if isValidId(userId) && isValidId(matchId) && isOwner(userId);
+        allow list: if isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(matchId)
+          && isOwner(userId)
+          && isValidMatchRecord(incoming(), userId, matchId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+        // Completed matches are immutable once recorded; only owner deletion for account purge is allowed.
+        allow update: if false;
+        allow delete: if isValidId(userId) && isValidId(matchId) && isOwner(userId);
+      }
+
+      match /sessions/{sessionId} {
+        allow get: if isValidId(userId) && isValidId(sessionId) && isOwner(userId);
+        allow list: if isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(sessionId)
+          && isOwner(userId)
+          && isValidActiveSession(incoming(), userId, sessionId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+        allow update: if isValidId(userId)
+          && isValidId(sessionId)
+          && isOwner(userId)
+          && isValidActiveSession(incoming(), userId, sessionId)
+          && incoming().ownerId == existing().ownerId
+          && incoming().sessionId == existing().sessionId
+          && incoming().gameId == existing().gameId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'stateMap',
+            'actionCount',
+            'elapsedMs',
+            'localUpdatedAt',
+            'updatedAt'
+          ]);
+        allow delete: if isValidId(userId) && isValidId(sessionId) && isOwner(userId);
+      }
+
+      match /achievements/{achievementId} {
+        allow get: if isValidId(userId) && isValidId(achievementId) && isOwner(userId);
+        allow list: if isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(achievementId)
+          && isOwner(userId)
+          && isValidUnlockedAchievement(incoming(), userId, achievementId)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+        allow update: if false;
+        allow delete: if isValidId(userId) && isValidId(achievementId) && isOwner(userId);
+      }
+
+      match /dailyChallenges/{dateKey} {
+        allow get: if isValidId(userId) && isValidId(dateKey) && isOwner(userId);
+        allow list: if isOwner(userId) && resource.data.ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(dateKey)
+          && isOwner(userId)
+          && isValidDailyChallenge(incoming(), userId, dateKey)
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+        allow update: if isValidId(userId)
+          && isValidId(dateKey)
+          && isOwner(userId)
+          && isValidDailyChallenge(incoming(), userId, dateKey)
+          && existing().completed == false
+          && incoming().ownerId == existing().ownerId
+          && incoming().dateKey == existing().dateKey
+          && incoming().gameId == existing().gameId
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly([
+            'completed',
+            'completedAt',
+            'updatedAt'
+          ]);
+        allow delete: if isValidId(userId) && isValidId(dateKey) && isOwner(userId);
+      }
+    }
+
+    // 5. Collection Rules: Online Multiplayer Rooms
+    match /rooms/{roomCode} {
+      allow get: if isValidRoomCode(roomCode)
+        && isVerifiedUser()
+        && (existing().status == 'waiting' || request.auth.uid in existing().seatUids);
+      allow list: if isVerifiedUser() && request.auth.uid in resource.data.seatUids;
+      allow create: if isValidRoomCode(roomCode)
+        && isVerifiedUser()
+        && isValidRoom(incoming(), roomCode)
+        && incoming().hostUid == request.auth.uid
+        && incoming().status == 'waiting'
+        && incoming().seatUids.size() == 1
+        && incoming().seatUids[0] == request.auth.uid
+        && incoming().version == 0
+        && !('winnerUid' in incoming())
+        && !('authoritativeReceipt' in incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidRoomCode(roomCode)
+        && isVerifiedUser()
+        && existing().status != 'finished'
+        && isValidRoom(incoming(), roomCode)
+        && incoming().roomCode == existing().roomCode
+        && incoming().hostUid == existing().hostUid
+        && incoming().gameId == existing().gameId
+        && incoming().maxPlayers == existing().maxPlayers
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action: Join Waiting Room
+          (
+            existing().status == 'waiting'
+            && incoming().status == 'waiting'
+            && !(request.auth.uid in existing().seatUids)
+            && request.auth.uid in incoming().seatUids
+            && incoming().seatUids.size() == existing().seatUids.size() + 1
+            && incoming().diff(existing()).affectedKeys().hasOnly(['seatUids', 'updatedAt'])
+          )
+          ||
+          // Action: Toggle Ready
+          (
+            existing().status == 'waiting'
+            && incoming().status == 'waiting'
+            && request.auth.uid in existing().seatUids
+            && incoming().diff(existing()).affectedKeys().hasOnly(['readyUids', 'updatedAt'])
+          )
+          ||
+          // Action: Host Starts Match
+          (
+            existing().status == 'waiting'
+            && incoming().status == 'active'
+            && request.auth.uid == existing().hostUid
+            && existing().seatUids.size() >= 2
+            && incoming().version == existing().version + 1
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'version', 'updatedAt'])
+          )
+        );
+      allow delete: if isValidRoomCode(roomCode)
+        && isVerifiedUser()
+        && existing().hostUid == request.auth.uid
+        && existing().status == 'waiting';
+
+      match /actions/{actionId} {
+        allow get: if isValidRoomCode(roomCode)
+          && isValidId(actionId)
+          && isVerifiedUser()
+          && request.auth.uid in get(/databases/$(database)/documents/rooms/$(roomCode)).data.seatUids;
+        allow list: if false;
+        allow create: if isValidRoomCode(roomCode)
+          && isValidId(actionId)
+          && isVerifiedUser()
+          && isValidRoomAction(incoming(), roomCode)
+          && incoming().createdAt == request.time
+          && get(/databases/$(database)/documents/rooms/$(roomCode)).data.status == 'active'
+          && request.auth.uid in get(/databases/$(database)/documents/rooms/$(roomCode)).data.seatUids;
+        allow update, delete: if false;
+      }
+    }
+  }
+}
