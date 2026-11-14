@@ -4,7 +4,6 @@ import {
   BookOpen,
   Cpu,
   Eye,
-  Globe,
   Play,
   ShieldCheck,
   Users,
@@ -25,19 +24,13 @@ import {
   Dice3D,
   LudoPawn3D,
 } from '../tabletop/TactilePieces';
-import {
-  OnlineRoomSocket,
-  type OnlineRoomSnapshot,
-} from '../../firebase/onlineClient';
 import { GameArenaShell } from './GameArenaShell';
 import { MatchOutcomeScreen } from './MatchOutcomeScreen';
-import { OnlineRoomLobby } from './OnlineRoomLobby';
 
 interface GameSetupScreenProps {
   game: GameCatalogEntry;
   stats: GameStats;
   initialResumeSession?: ActiveSession | null;
-  initialJoinRoomCode?: string | null;
   onBack: () => void;
 }
 
@@ -52,14 +45,11 @@ export function GameSetupScreen({
   game,
   stats,
   initialResumeSession = null,
-  initialJoinRoomCode = null,
   onBack,
 }: GameSetupScreenProps) {
   const { sessions } = useAppState();
   const [selectedMode, setSelectedMode] = useState<GameMode>(
-    initialJoinRoomCode && game.supportedModes.includes('online')
-      ? 'online'
-      : game.supportedModes[0] ?? 'practice'
+    game.supportedModes[0] ?? 'practice'
   );
   const [difficulty, setDifficulty] = useState<AIDifficulty>('medium');
   const [playerCount, setPlayerCount] = useState<number>(game.minPlayers);
@@ -69,10 +59,6 @@ export function GameSetupScreen({
     useState<MatchSetupConfig | null>(null);
   const [resumingSession, setResumingSession] =
     useState<ActiveSession | null>(initialResumeSession);
-  const [onlineSession, setOnlineSession] = useState<{
-    initialRoom: OnlineRoomSnapshot;
-    socket: OnlineRoomSocket;
-  } | null>(null);
 
   const [inspectArena, setInspectArena] = useState(false);
   const [previewDice, setPreviewDice] = useState(5);
@@ -81,16 +67,11 @@ export function GameSetupScreen({
   const savedSessionForGame = sessions.find((s) => s.gameId === game.id) ?? null;
 
   useEffect(() => {
-    setSelectedMode(
-      initialJoinRoomCode && game.supportedModes.includes('online')
-        ? 'online'
-        : game.supportedModes[0] ?? 'practice'
-    );
+    setSelectedMode(game.supportedModes[0] ?? 'practice');
     setPlayerCount(game.minPlayers);
     setVariant('standard');
     setInspectArena(false);
     setPreviewOutcome(null);
-    setOnlineSession(null);
     if (initialResumeSession && initialResumeSession.gameId === game.id) {
       setResumingSession(initialResumeSession);
       setActiveMatchConfig({
@@ -104,7 +85,7 @@ export function GameSetupScreen({
       setResumingSession(null);
       setActiveMatchConfig(null);
     }
-  }, [game, initialResumeSession, initialJoinRoomCode]);
+  }, [game, initialResumeSession]);
 
   const engineAvailable = isEngineRegistered(game.id);
   const playerCountOptions: number[] = [];
@@ -119,11 +100,9 @@ export function GameSetupScreen({
         game={game}
         setupConfig={activeMatchConfig}
         resumeSession={resumingSession}
-        onlineRoom={onlineSession}
         onExit={() => {
           setActiveMatchConfig(null);
           setResumingSession(null);
-          setOnlineSession(null);
         }}
       />
     );
@@ -380,7 +359,6 @@ export function GameSetupScreen({
                     {mode === 'ai' && <Cpu className="w-4 h-4" />}
                     {mode === 'local' && <Users className="w-4 h-4" />}
                     {mode === 'practice' && <BookOpen className="w-4 h-4" />}
-                    {mode === 'online' && <Globe className="w-4 h-4" />}
                     <span>{MODE_LABELS[mode]}</span>
                   </button>
                 );
@@ -572,27 +550,7 @@ export function GameSetupScreen({
           </div>
 
           <div className="pt-4 border-t border-[var(--cp-border)] space-y-4">
-            {selectedMode === 'online' && engineAvailable ? (
-              <OnlineRoomLobby
-                game={game}
-                difficulty={difficulty}
-                maxPlayers={playerCount}
-                variant={variant}
-                initialJoinCode={initialJoinRoomCode}
-                onStartOnlineMatch={(room, socket) => {
-                  setOnlineSession({ initialRoom: room, socket });
-                  setActiveMatchConfig({
-                    gameId: room.gameId,
-                    mode: 'online',
-                    difficulty: room.difficulty,
-                    playerCount: room.seats.length,
-                    seed: room.seed,
-                    variant: room.variant,
-                  });
-                }}
-              />
-            ) : (
-              <>
+            <>
                 <div className="flex items-start gap-2.5 text-xs text-[var(--cp-text-muted)]">
                   <ShieldCheck className="w-4 h-4 text-[var(--cp-gold)] shrink-0 mt-0.5" />
                   <span>
@@ -628,8 +586,7 @@ export function GameSetupScreen({
                     </ActionButton>
                   )}
                 </div>
-              </>
-            )}
+            </>
           </div>
         </SurfaceCard>
       </div>
