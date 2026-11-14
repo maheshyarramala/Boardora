@@ -490,3 +490,102 @@
     transform: none !important;
   }
 }
+
+
+/* BOARDORA 3D PREMIUM PASS — shared by every playable board and setup view */
+.boardora-3d-board {
+  --board-edge-light: rgba(255, 239, 190, .48);
+  --board-edge-dark: rgba(13, 9, 7, .92);
+  border: 1px solid rgba(244, 211, 137, .82) !important;
+  border-radius: 1.15rem;
+  background-clip: padding-box;
+  box-shadow:
+    0 1px 0 var(--board-edge-light),
+    0 3px 0 rgba(154, 111, 49, .96),
+    0 6px 0 rgba(73, 45, 25, .98),
+    0 9px 0 var(--board-edge-dark),
+    0 18px 26px rgba(0, 0, 0, .42),
+    0 30px 52px -22px rgba(0, 0, 0, .92),
+    inset 0 2px 0 rgba(255, 255, 255, .2),
+    inset 0 -4px 9px rgba(0, 0, 0, .32) !important;
+}
+.boardora-3d-board::before {
+  inset: 4px;
+  border: 1px solid rgba(255, 239, 190, .3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -2px 5px rgba(0,0,0,.13),
+    0 0 0 1px rgba(44,26,12,.16);
+}
+.boardora-3d-board::after {
+  inset: auto 5% -12px;
+  height: 14px;
+  background: linear-gradient(180deg, #81572f 0%, #422817 42%, #160e09 100%);
+  box-shadow: 0 10px 14px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,226,163,.22);
+}
+.boardora-3d-board > svg,
+.boardora-3d-board > div {
+  border-radius: .72rem;
+}
+.boardora-3d-board svg {
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.16));
+}
+.boardora-3d-stage {
+  perspective: 1100px;
+  transform: translateZ(0);
+}
+.boardora-3d-stage > * {
+  transform: rotateX(1.2deg);
+  transform-origin: center bottom;
+}
+.game-setup-shell {
+  position: relative;
+  isolation: isolate;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.game-setup-shell > .grid > div > .rounded-2xl,
+.game-setup-shell [data-surface-card],
+.game-setup-shell .surface-card {
+  border-color: rgba(236,203,124,.3);
+  box-shadow:
+    0 2px 0 rgba(255,239,190,.12),
+    0 8px 0 rgba(5,12,25,.38),
+    0 22px 38px -22px rgba(0,0,0,.82),
+    inset 0 1px 0 rgba(255,255,255,.07);
+}
+.game-setup-shell .parlor-art-frame,
+.game-setup-shell .boardora-setup-art {
+  border: 1px solid rgba(236,203,124,.58);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(236,203,124,.16), rgba(8,23,47,.32) 48%, rgba(4,12,25,.72));
+  box-shadow:
+    0 4px 0 rgba(91,58,28,.72),
+    0 12px 24px rgba(0,0,0,.36),
+    inset 0 1px 0 rgba(255,255,255,.16);
+}
+.game-setup-shell button:not(:disabled) {
+  -webkit-tap-highlight-color: transparent;
+}
+.game-setup-shell button:not(:disabled):active {
+  transform: translateY(2px);
+  filter: brightness(.98);
+}
+.game-setup-shell button:focus-visible {
+  outline: 2px solid var(--cp-gold-bright);
+  outline-offset: 3px;
+}
+@media (max-width: 639px) {
+  .boardora-3d-board {
+    transform: perspective(1000px) rotateX(1.4deg) translateY(-1px);
+    box-shadow:
+      0 2px 0 rgba(255,239,190,.28),
+      0 5px 0 rgba(91,58,28,.95),
+      0 8px 0 rgba(18,11,7,.96),
+      0 20px 34px -16px rgba(0,0,0,.92),
+      inset 0 2px 3px rgba(255,244,210,.2),
+      inset 0 -4px 8px rgba(0,0,0,.32) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-setup-shell button:not(:disabled):active { transform: none; }
+}
