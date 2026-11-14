@@ -1,15 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { audioEngine } from '../../platform/audio';
 import { hapticsBridge } from '../../platform/haptics';
 import { useAppState } from '../../state/AppStateContext';
 import { BoardoraLogo } from '../brand/BoardoraLogo';
-import {
-  BoardPerspectiveStage,
-  ChessPiece3D,
-  Dice3D,
-  LudoPawn3D,
-} from '../tabletop/TactilePieces';
 
 interface TitleScreenProps {
   onEnterParlor: () => void;
@@ -17,7 +11,6 @@ interface TitleScreenProps {
 
 export function TitleScreen({ onEnterParlor }: TitleScreenProps) {
   const { t, sessions, profile, levelInfo } = useAppState();
-  const [dieFace, setDieFace] = useState(5);
 
   const handleStart = () => {
     audioEngine.play('ui-click');
@@ -47,8 +40,8 @@ export function TitleScreen({ onEnterParlor }: TitleScreenProps) {
       />
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-10 py-10 sm:py-14">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-          <div className="lg:col-span-6 boardora-enter">
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <div className="w-full boardora-enter">
             <BoardoraLogo variant="horizontal" size="lg" />
 
             <h1
@@ -58,7 +51,7 @@ export function TitleScreen({ onEnterParlor }: TitleScreenProps) {
               One World. Ten Games. Endless Fun.
             </h1>
 
-            <p className="mt-4 text-sm sm:text-base leading-relaxed text-[#A7B8D1] max-w-lg">
+            <p className="mt-4 mx-auto text-sm sm:text-base leading-relaxed text-[#A7B8D1] max-w-lg">
               {t('app.subtitle')}
             </p>
 
@@ -80,7 +73,7 @@ export function TitleScreen({ onEnterParlor }: TitleScreenProps) {
               </div>
             )}
 
-            <div className="mt-7 flex flex-wrap items-center gap-4">
+            <div className="mt-7 flex justify-center flex-wrap items-center gap-4">
               <button
                 type="button"
                 onClick={handleStart}
@@ -92,7 +85,7 @@ export function TitleScreen({ onEnterParlor }: TitleScreenProps) {
             </div>
 
             <p className="mt-5 text-xs text-[#A7B8D1] tracking-wide">
-              Press Enter or tap to begin · Offline IndexedDB · Deterministic rule engines
+              Your games are waiting inside the hall.
             </p>
           </div>
 
