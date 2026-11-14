@@ -11,9 +11,9 @@ import { getCatalogEntry, type GameCatalogEntry } from './core/catalog';
 import type { ActiveSession } from './core/types';
 import { registerBuiltEngines } from './engines/registerBuiltEngines';
 import { audioEngine } from './platform/audio';
+import { initializeBoardoraAds } from './monetization/ads';
 
 registerBuiltEngines();
-import { getOnlineRoom } from './firebase/onlineClient';
 import {
   initializeCapacitorNativeShell,
   subscribeAndroidBackButton,
@@ -33,48 +33,17 @@ import { TitleScreen } from './components/shell/TitleScreen';
 
 type ShellTab = 'games' | 'daily' | 'stats' | 'achievements' | 'profile' | 'settings';
 
-function readRoomInviteFromUrl(): string | null {
-  if (typeof window === 'undefined') return null;
-  const code = new URLSearchParams(window.location.search).get('room');
-  return code && code.trim().length >= 4 ? code.trim().toUpperCase() : null;
-}
-
 function BoardoraShell() {
-  const { ready, cloudUser, profile, levelInfo, stats, t, signInWithGoogle } =
-    useAppState();
-  const [inviteRoomCode, setInviteRoomCode] = useState<string | null>(() =>
-    readRoomInviteFromUrl()
-  );
+  const { ready, profile, levelInfo, stats, t } = useAppState();
   const [splashDone, setSplashDone] = useState(false);
-  const [inParlor, setInParlor] = useState(() => Boolean(readRoomInviteFromUrl()));
+  const [inParlor, setInParlor] = useState(false);
   const [activeTab, setActiveTab] = useState<ShellTab>('games');
   const [setupGame, setSetupGame] = useState<GameCatalogEntry | null>(null);
   const [resumeSession, setResumeSession] = useState<ActiveSession | null>(null);
-  const [inviteError, setInviteError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!inviteRoomCode || !cloudUser) return;
-    let cancelled = false;
-    void getOnlineRoom(inviteRoomCode)
-      .then((room) => {
-        if (cancelled) return;
-        setInviteError(null);
-        setSetupGame(getCatalogEntry(room.gameId));
-      })
-      .catch((err) => {
-        if (cancelled) return;
-        setInviteError(
-          err instanceof Error ? err.message : `Unable to open room ${inviteRoomCode}.`
-        );
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [inviteRoomCode, cloudUser]);
-
   useEffect(() => {
     if (ready) {
       void initializeCapacitorNativeShell();
+      void initializeBoardoraAds();
     }
   }, [ready]);
 
@@ -90,7 +59,6 @@ function BoardoraShell() {
       if (setupGame) {
         setSetupGame(null);
         setResumeSession(null);
-        setInviteRoomCode(null);
         return true;
       }
       if (activeTab !== 'games') {
@@ -139,7 +107,6 @@ function BoardoraShell() {
     audioEngine.play('ui-click');
     setSetupGame(null);
     setResumeSession(null);
-    setInviteRoomCode(null);
     setActiveTab(tab);
   };
 
@@ -168,7 +135,6 @@ function BoardoraShell() {
             onClick={() => {
               setSetupGame(null);
               setResumeSession(null);
-              setInviteRoomCode(null);
               setInParlor(false);
             }}
             className="text-left whitespace-nowrap shrink-0 cursor-pointer"
@@ -246,52 +212,15 @@ function BoardoraShell() {
       </header>
 
       {/* Main Content Area (padded for mobile bottom tab bar + safe area) */}
-      <main className="flex-1 min-h-0 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-10 overflow-y-auto boardora-scroll-region">
-        {inviteRoomCode && !setupGame && (
-          <div className="mb-6 rounded-2xl border border-[var(--cp-gold)] bg-[var(--cp-bg-elevated)] p-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="text-sm">
-              <span className="font-semibold text-[var(--cp-gold)]">
-                Room Invite: {inviteRoomCode}
-              </span>
-              <p className="text-xs text-[var(--cp-text-muted)] mt-0.5">
-                {inviteError
-                  ? inviteError
-                  : cloudUser
-                  ? 'Resolving invited room table...'
-                  : 'Sign in with Google to join this online table automatically.'}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              {!cloudUser && (
-                <button
-                  type="button"
-                  onClick={() => void signInWithGoogle()}
-                  className="min-h-[40px] px-4 rounded-xl bg-[var(--cp-gold)] text-[#08172F] text-xs font-semibold cursor-pointer"
-                >
-                  Sign in with Google
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => setInviteRoomCode(null)}
-                className="min-h-[40px] px-3 rounded-xl bg-[var(--cp-surface)] text-xs text-[var(--cp-text-muted)] cursor-pointer"
-              >
-                Dismiss
-              </button>
-            </div>
-          </div>
-        )}
-
+      <main className={`flex-1 min-h-0 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 ${activeTab === 'games' && !setupGame ? 'pb-36 md:pb-36' : 'pb-24 md:pb-10'} overflow-y-auto boardora-scroll-region`}>
         {setupGame ? (
           <GameSetupScreen
             game={setupGame}
             stats={stats.byGame[setupGame.id]}
             initialResumeSession={resumeSession}
-            initialJoinRoomCode={inviteRoomCode}
             onBack={() => {
               setSetupGame(null);
               setResumeSession(null);
-              setInviteRoomCode(null);
             }}
           />
         ) : (

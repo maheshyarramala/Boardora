@@ -8,7 +8,7 @@ import {
   signOut,
   type User,
 } from 'firebase/auth';
-import { doc, getDocFromServer, getFirestore } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
 export enum OperationType {
@@ -69,22 +69,6 @@ export function handleFirestoreError(
   console.error('Firestore Error: ', JSON.stringify(errInfo));
   throw new Error(JSON.stringify(errInfo));
 }
-
-let connectionTested = false;
-
-export async function testFirestoreConnection(): Promise<void> {
-  if (connectionTested || typeof window === 'undefined') return;
-  connectionTested = true;
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.error('Please check your Firebase configuration.');
-    }
-  }
-}
-
-void testFirestoreConnection();
 
 export function subscribeFirebaseAuth(
   cb: (user: User | null) => void

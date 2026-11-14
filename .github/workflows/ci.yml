@@ -16,14 +16,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 22 (Capacitor 6 LTS runtime)
+      - name: Setup Node.js 24 (Capacitor 6 LTS runtime)
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: npm
+          node-version: 24
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Run Firestore Security Rules Lint
         run: npm run lint:rules

@@ -10,6 +10,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:name=".MainActivity"
@@ -37,7 +41,7 @@
         </provider>
     </application>
 
-    <!-- Minimal required permissions: optional online rooms/sync + haptics -->
+    <!-- Internet is used only for optional cloud saves and ads; gameplay is local. -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />

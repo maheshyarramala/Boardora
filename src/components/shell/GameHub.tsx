@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ArrowRight,
   BarChart3,
@@ -19,6 +19,7 @@ import {
 import { ActionButton, SurfaceCard } from '../../design-system/primitives';
 import { audioEngine } from '../../platform/audio';
 import { hapticsBridge } from '../../platform/haptics';
+import { removeGameHallBanner, showGameHallBanner } from '../../monetization/ads';
 import { useAppState } from '../../state/AppStateContext';
 import { GameBoardArtwork } from '../brand/GameBoardArtwork';
 import {
@@ -63,6 +64,13 @@ export function GameHub({
   const [filter, setFilter] = useState<CategoryFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [heroDie, setHeroDie] = useState(5);
+
+  useEffect(() => {
+    void showGameHallBanner();
+    return () => {
+      void removeGameHallBanner();
+    };
+  }, []);
 
   const filteredGames = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();

@@ -1,6 +1,5 @@
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Chess } from 'chess.js';
-import { RefreshCw, ShieldCheck, Wifi, WifiOff } from 'lucide-react';
 import type { GameCatalogEntry } from '../../core/catalog';
 import type { GameEngine, GameEvent, GameOutcome, MatchSetupConfig } from '../../core/engine';
 import { calculateMatchXp } from '../../core/progression';
@@ -44,13 +43,9 @@ import {
   pushProfileToCloud,
   pushSessionToCloud,
 } from '../../firebase/cloudSync';
-import type {
-  OnlineRoomSnapshot,
-  OnlineRoomSocket,
-  SocketConnectionState,
-} from '../../firebase/onlineClient';
 import { audioEngine } from '../../platform/audio';
 import { hapticsBridge } from '../../platform/haptics';
+import { maybeShowPostMatchInterstitial } from '../../monetization/ads';
 import { useAppState } from '../../state/AppStateContext';
 import { defaultRepository } from '../../storage/db';
 import { CURRENT_SCHEMA_VERSION } from '../../storage/migrations';
@@ -92,10 +87,6 @@ interface ActiveMatchRunnerProps {
   game: GameCatalogEntry;
   setupConfig: MatchSetupConfig;
   resumeSession?: ActiveSession | null;
-  onlineRoom?: {
-    initialRoom: OnlineRoomSnapshot;
-    socket: OnlineRoomSocket;
-  } | null;
   onExit: () => void;
 }
 
@@ -245,7 +236,6 @@ export function ActiveMatchRunner({
   game,
   setupConfig,
   resumeSession,
-  onlineRoom = null,
   onExit,
 }: ActiveMatchRunnerProps) {
   const { cloudUser, profile, refreshAll } = useAppState();
@@ -258,10 +248,6 @@ export function ActiveMatchRunner({
   );
   const [xpAwarded, setXpAwarded] = useState(0);
   const [errorBanner, setErrorBanner] = useState<string | null>(null);
-  const [roomSnapshot, setRoomSnapshot] = useState<OnlineRoomSnapshot | null>(
-    onlineRoom?.initialRoom ?? null
-  );
-  const [wsState, setWsState] = useState<SocketConnectionState>('connected');
 
   const sessionIdRef = useRef<string>(
     resumeSession?.sessionId ?? `sess-${game.id}-${Date.now()}`
@@ -270,13 +256,10 @@ export function ActiveMatchRunner({
   const elapsedRef = useRef(elapsedSeconds);
   elapsedRef.current = elapsedSeconds;
 
-  const isOnline = Boolean(onlineRoom);
-
   const recordFinishedMatch = useCallback(
     async (
       nextState: unknown,
       nextOutcome: GameOutcome,
-      serverSignature?: string | null
     ) => {
       if (matchRecordedRef.current) return;
       matchRecordedRef.current = true;
@@ -295,38 +278,32 @@ export function ActiveMatchRunner({
         mode: setupConfig.mode,
         difficulty: setupConfig.difficulty,
         outcome: nextOutcome.humanOutcome,
-        opponentLabel: isOnline
-          ? `Online Room ${roomSnapshot?.roomCode ?? ''}`
-          : setupConfig.mode === 'ai'
-          ? `AI (${setupConfig.difficulty})`
-          : setupConfig.mode === 'local'
-          ? `${setupConfig.playerCount}P Pass & Play`
-          : 'Solo Practice',
+        opponentLabel:
+          setupConfig.mode === 'ai'
+            ? `AI (${setupConfig.difficulty})`
+            : setupConfig.mode === 'local'
+            ? `${setupConfig.playerCount}P Pass & Play`
+            : 'Solo Practice',
         movesCount,
         durationMs: elapsedRef.current * 1000,
         xpAwarded: earned,
         score: nextOutcome.score,
-        ...(serverSignature ? { serverSignature } : {}),
         completedAt: Date.now(),
       };
       const res = await defaultRepository.recordCompletedMatch(
         matchRecord,
-        isOnline ? undefined : sessionIdRef.current
+        sessionIdRef.current
       );
       if (cloudUser && profile?.privacyConsent.cloudSyncEnabled) {
         void pushMatchToCloud(cloudUser.uid, matchRecord);
         void pushProfileToCloud(cloudUser.uid, res.profile);
-        if (!isOnline) {
-          void deleteSessionFromCloud(cloudUser.uid, sessionIdRef.current);
-        }
+        void deleteSessionFromCloud(cloudUser.uid, sessionIdRef.current);
       }
       await refreshAll();
     },
     [
       game.id,
       setupConfig,
-      isOnline,
-      roomSnapshot?.roomCode,
       cloudUser,
       profile?.privacyConsent.cloudSyncEnabled,
       refreshAll,
@@ -338,9 +315,7 @@ export function ActiveMatchRunner({
     let cancelled = false;
     void loadGameEngine(game.id).then((loaded) => {
       if (cancelled || !loaded) return;
-      const initialState = onlineRoom?.initialRoom.serializedState
-        ? loaded.deserialize(onlineRoom.initialRoom.serializedState)
-        : resumeSession
+      const initialState = resumeSession
         ? loaded.deserialize(resumeSession.serializedState)
         : loaded.createInitialState(setupConfig);
       setEngine(loaded);
@@ -351,53 +326,7 @@ export function ActiveMatchRunner({
     return () => {
       cancelled = true;
     };
-  }, [game.id, setupConfig, resumeSession, onlineRoom]);
-
-  // Attach authoritative WebSocket listener when in online mode
-  useEffect(() => {
-    if (!onlineRoom || !engine) return;
-    onlineRoom.socket.updateHandlers({
-      onSnapshot: (nextRoom: OnlineRoomSnapshot) => {
-        setRoomSnapshot(nextRoom);
-        if (nextRoom.serializedState) {
-          const nextState = engine.deserialize(nextRoom.serializedState);
-          setGameState(nextState);
-          const evaluated = engine.evaluateOutcome(nextState);
-          const viewerOutcome: GameOutcome | null =
-            nextRoom.status === 'finished'
-              ? {
-                  finished: true,
-                  winnerIndex: nextRoom.winnerSeatIndex,
-                  humanOutcome: nextRoom.outcomeForViewer ?? 'draw',
-                  reason:
-                    nextRoom.outcomeReason ??
-                    evaluated?.reason ??
-                    'Online match concluded.',
-                  score: nextRoom.outcomeScore,
-                }
-              : null;
-          setOutcome(viewerOutcome);
-          playFeedbackForEvents(nextRoom.lastEvents, viewerOutcome);
-          if (viewerOutcome?.finished) {
-            void recordFinishedMatch(
-              nextState,
-              viewerOutcome,
-              nextRoom.authoritativeReceipt
-            );
-          }
-        }
-      },
-      onRejected: (msg: string) => {
-        audioEngine.play('error');
-        hapticsBridge.trigger('warning');
-        setErrorBanner(msg);
-        window.setTimeout(() => setErrorBanner(null), 2600);
-      },
-      onConnection: (st: SocketConnectionState) => {
-        setWsState(st);
-      },
-    });
-  }, [onlineRoom, engine, recordFinishedMatch]);
+  }, [game.id, setupConfig, resumeSession]);
 
   // Real elapsed timer
   useEffect(() => {
@@ -414,10 +343,9 @@ export function ActiveMatchRunner({
       nextState: unknown,
       nextOutcome: GameOutcome | null
     ) => {
-      if (isOnline) return;
       const movesCount = getMoveCount(nextState);
       if (nextOutcome?.finished) {
-        await recordFinishedMatch(nextState, nextOutcome, null);
+        await recordFinishedMatch(nextState, nextOutcome);
       } else {
         const sessionObj: ActiveSession = {
           schemaVersion: CURRENT_SCHEMA_VERSION,
@@ -440,7 +368,6 @@ export function ActiveMatchRunner({
       }
     },
     [
-      isOnline,
       recordFinishedMatch,
       game.id,
       setupConfig,
@@ -462,11 +389,6 @@ export function ActiveMatchRunner({
         return;
       }
 
-      if (onlineRoom && roomSnapshot) {
-        onlineRoom.socket.sendAction(roomSnapshot.version, action);
-        return;
-      }
-
       const transition = engine.applyAction(gameState, action);
       const nextOutcome = engine.evaluateOutcome(transition.state);
       playFeedbackForEvents(transition.events, nextOutcome);
@@ -475,12 +397,12 @@ export function ActiveMatchRunner({
       setErrorBanner(null);
       void persistOrFinish(engine, transition.state, nextOutcome);
     },
-    [engine, gameState, onlineRoom, roomSnapshot, persistOrFinish]
+    [engine, gameState, persistOrFinish]
   );
 
   // Automated AI Turn Driver (offloaded to Web Workers for board search games)
   useEffect(() => {
-    if (isOnline || !engine || !gameState || outcome?.finished) return;
+    if (!engine || !gameState || outcome?.finished) return;
     if (getIsHumanTurn(game.id, gameState)) return;
 
     let cancelled = false;
@@ -527,7 +449,6 @@ export function ActiveMatchRunner({
       cancelled = true;
     };
   }, [
-    isOnline,
     engine,
     gameState,
     outcome?.finished,
@@ -537,10 +458,6 @@ export function ActiveMatchRunner({
   ]);
 
   const handleRestart = () => {
-    if (isOnline) {
-      handleExit();
-      return;
-    }
     if (!engine) return;
     sessionIdRef.current = `sess-${game.id}-${Date.now()}`;
     matchRecordedRef.current = false;
@@ -557,10 +474,13 @@ export function ActiveMatchRunner({
   };
 
   const handleExit = () => {
-    if (onlineRoom) {
-      onlineRoom.socket.close();
-    }
-    void refreshAll().then(() => onExit());
+    void (async () => {
+      if (outcome?.finished) {
+        await maybeShowPostMatchInterstitial();
+      }
+      await refreshAll();
+      onExit();
+    })();
   };
 
   if (!engine || !gameState) {
@@ -571,22 +491,8 @@ export function ActiveMatchRunner({
     );
   }
 
-  const mySeatIndex =
-    isOnline && roomSnapshot && cloudUser
-      ? roomSnapshot.seats.findIndex((s) => s.uid === cloudUser.uid)
-      : -1;
-  const isHumanTurn =
-    isOnline && roomSnapshot
-      ? roomSnapshot.status === 'active' &&
-        roomSnapshot.activeSeatIndex === mySeatIndex
-      : getIsHumanTurn(game.id, gameState);
-
-  const turnLabel =
-    isOnline && roomSnapshot
-      ? isHumanTurn
-        ? 'Your Turn (Authoritative)'
-        : `${roomSnapshot.seats[roomSnapshot.activeSeatIndex ?? 0]?.displayName ?? 'Opponent'}'s Turn`
-      : getTurnLabel(game.id, gameState);
+  const isHumanTurn = getIsHumanTurn(game.id, gameState);
+  const turnLabel = getTurnLabel(game.id, gameState);
 
   const moveCount = getMoveCount(gameState);
   const legalActions = engine.getLegalActions(gameState);
@@ -596,9 +502,7 @@ export function ActiveMatchRunner({
       <GameArenaShell
         title={game.title}
         subtitle={
-          isOnline && roomSnapshot
-            ? `Room ${roomSnapshot.roomCode} · Seat ${mySeatIndex + 1}`
-            : setupConfig.mode === 'ai'
+          setupConfig.mode === 'ai'
             ? `vs AI (${setupConfig.difficulty})`
             : setupConfig.mode === 'local'
             ? 'Pass & Play'
@@ -612,43 +516,6 @@ export function ActiveMatchRunner({
         onExit={handleExit}
       >
         <div className="w-full space-y-2">
-          {isOnline && roomSnapshot && (
-            <div className="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[var(--cp-border)] bg-[var(--cp-bg-elevated)] px-3.5 py-2 text-xs">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-[var(--cp-gold)]" />
-                <span className="font-medium text-[var(--cp-text)]">
-                  Server-Authoritative Sync v{roomSnapshot.version}
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                {roomSnapshot.seats.map((seat) => (
-                  <span
-                    key={seat.uid}
-                    className={`inline-flex items-center gap-1 ${
-                      seat.connected ? 'text-emerald-300' : 'text-amber-300'
-                    }`}
-                  >
-                    <span
-                      className={`w-2 h-2 rounded-full ${
-                        seat.connected ? 'bg-emerald-400' : 'bg-amber-400'
-                      }`}
-                    />
-                    {seat.displayName}
-                  </span>
-                ))}
-                <span className="inline-flex items-center gap-1 text-[var(--cp-text-muted)]">
-                  {wsState === 'connected' ? (
-                    <Wifi className="w-3.5 h-3.5 text-emerald-400" />
-                  ) : wsState === 'reconnecting' ? (
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin text-amber-400" />
-                  ) : (
-                    <WifiOff className="w-3.5 h-3.5 text-red-400" />
-                  )}
-                </span>
-              </div>
-            </div>
-          )}
-
           {errorBanner && (
             <div
               role="alert"
