@@ -183,7 +183,7 @@ export function GameSetupScreen({
         >
           <div className="w-full max-w-3xl flex flex-col items-center gap-6 py-4">
             <BoardPerspectiveStage className="max-w-xl">
-              <div className="rounded-2xl overflow-hidden border-2 border-[var(--cp-border-strong)] bg-[var(--cp-wood)] p-3 sm:p-4">
+              <div className="boardora-setup-art rounded-2xl overflow-hidden border-2 border-[var(--cp-border-strong)] bg-[var(--cp-wood)] p-3 sm:p-4">
                 <GameBoardArtwork gameId={game.id} className="w-full h-auto" />
               </div>
             </BoardPerspectiveStage>
@@ -279,7 +279,7 @@ export function GameSetupScreen({
         <div className="lg:col-span-5 space-y-5">
           <SurfaceCard highlighted className="p-4 sm:p-5">
             <BoardPerspectiveStage>
-              <div className="rounded-xl overflow-hidden border border-[var(--cp-border-strong)] bg-[var(--cp-wood)] p-2">
+              <div className="boardora-setup-art rounded-xl overflow-hidden border border-[var(--cp-border-strong)] bg-[var(--cp-wood)] p-2">
                 <GameBoardArtwork gameId={game.id} className="w-full h-auto" />
               </div>
             </BoardPerspectiveStage>
