@@ -183,7 +183,7 @@ export function ChessBoard({
             </span>
           </div>
 
-          <div className="rounded-2xl bg-[#2A1D18] p-2 sm:p-3 border-2 border-[var(--cp-border-strong)] shadow-[0_24px_48px_-14px_rgba(0,0,0,0.75)]">
+          <div className="boardora-3d-board rounded-2xl bg-[#2A1D18] p-2 sm:p-3 border-2 border-[var(--cp-border-strong)] shadow-[0_24px_48px_-14px_rgba(0,0,0,0.75)]">
           <div className="grid grid-cols-8 aspect-square w-full rounded-lg overflow-hidden border border-[#140D0A]">
             {displayRanks.map((rank) => {
               const rIdx = 8 - Number(rank);
