@@ -91,11 +91,11 @@ export function GameHub({
   return (
     <div className="space-y-8 boardora-enter">
       {/* Hero Section: Premium Welcome + Continue Playing Card + 3D Board-Game Artwork */}
-      <SurfaceCard highlighted className="p-5 sm:p-7 overflow-hidden">
+      <SurfaceCard highlighted className="parlor-hero p-5 sm:p-8 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           <div className="lg:col-span-7 space-y-5">
             <div>
-              <p className="text-[11px] font-semibold tracking-[0.22em] text-[var(--cp-gold-text)] uppercase">
+              <p className="parlor-section-label">
                 ONE WORLD. TEN GAMES. ENDLESS FUN.
               </p>
               <h1
@@ -396,30 +396,42 @@ export function GameHub({
             return (
               <SurfaceCard
                 key={game.id}
-                className="p-4 flex flex-col justify-between hover:border-[var(--cp-border-strong)] hover:-translate-y-0.5 transition-all duration-150"
+                className="game-card p-0 flex flex-col justify-between"
               >
                 <div>
-                  <h2 className="font-display text-base sm:text-[17px] font-bold text-[var(--cp-text)] leading-snug">
-                    {String(game.number).padStart(2, '0')}. {game.title}
-                  </h2>
-
-                  <div className="mt-3 rounded-xl overflow-hidden border border-[var(--cp-border)] shadow-inner bg-[#08172F] aspect-[16/9]">
-                    <GameBoardArtwork
-                      gameId={game.id}
-                      className="w-full h-full object-contain"
-                    />
+                  <div className="flex items-center justify-between gap-3 px-4 pt-4 pb-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="game-card-number">{String(game.number).padStart(2, '0')}</span>
+                      <h2 className="font-display text-base sm:text-[17px] font-bold text-[var(--cp-text)] leading-snug truncate">
+                        {game.title}
+                      </h2>
+                    </div>
+                    <span className="text-[9px] font-bold uppercase tracking-[.16em] text-[var(--cp-gold-text)] shrink-0">
+                      {game.category}
+                    </span>
                   </div>
 
-                  <p className="mt-3 text-sm leading-snug text-[var(--cp-text-muted)] line-clamp-2">
-                    {game.tagline}
-                  </p>
+                  <div className="game-card-art mx-3 rounded-xl overflow-hidden border border-[var(--cp-border-strong)] aspect-[16/10]">
+                    <GameBoardArtwork
+                      gameId={game.id}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-2.5 left-3 z-[1] rounded-full border border-white/15 bg-[#08172F]/75 px-2.5 py-1 text-[10px] font-semibold text-[#F4EBDD] backdrop-blur-sm">
+                      {playerLabel}
+                    </div>
+                  </div>
 
-                  <p className="mt-2.5 text-xs text-[var(--cp-text-muted)] font-mono-tabular">
-                    {playerLabel} · {difficultyLabel}
-                  </p>
+                  <div className="px-4 pt-3">
+                    <p className="text-sm leading-relaxed text-[var(--cp-text-muted)] line-clamp-2 min-h-[2.7rem]">
+                      {game.tagline}
+                    </p>
+                    <p className="mt-2 text-[10px] text-[var(--cp-text-muted)]/90 font-mono-tabular">
+                      {difficultyLabel} <span className="text-[var(--cp-gold)]">·</span> {game.estimatedMinutes}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-[var(--cp-border)] flex items-center justify-between gap-3">
+                <div className="mx-4 mt-4 mb-4 pt-3 border-t border-[var(--cp-border)] flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-xs capitalize text-[var(--cp-text-muted)] truncate">
                       {game.category} · {game.estimatedMinutes}
@@ -435,7 +447,7 @@ export function GameHub({
                       hapticsBridge.trigger('light');
                       onSelectGame(game);
                     }}
-                    className="min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-b from-[#E5C16C] to-[#D6AD55] text-[#08172F] text-xs sm:text-sm font-semibold inline-flex items-center gap-1.5 hover:from-[#F0D185] hover:to-[#DFB862] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
+                    className="game-card-play min-h-[44px] px-4 py-2 rounded-xl bg-gradient-to-b from-[#F0D58D] via-[#D6AD55] to-[#A9792E] text-[#08172F] text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 hover:from-[#F8E4A9] hover:to-[#D6AD55] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
                   >
                     <Play className="w-3.5 h-3.5" />
                     Play
