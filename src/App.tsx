@@ -159,7 +159,7 @@ function BoardoraShell() {
   const isLightTheme = profile?.preferences.theme === 'marble-light';
 
   return (
-    <div className="min-h-[100dvh] flex flex-col boardora-shell-bg text-[var(--cp-text)] overflow-x-hidden">
+    <div className="h-[100dvh] min-h-0 flex flex-col boardora-shell-bg text-[var(--cp-text)] overflow-hidden">
       {/* Three-Zone Header: Boardora Emblem & Wordmark | Navigation | Avatar, Level & Settings */}
       <header className="sticky top-0 z-30 pt-safe border-b border-[var(--cp-border)] bg-[var(--cp-bg-elevated)]/95 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-6">
@@ -246,7 +246,7 @@ function BoardoraShell() {
       </header>
 
       {/* Main Content Area (padded for mobile bottom tab bar + safe area) */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-10">
+      <main className="flex-1 min-h-0 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-10 overflow-y-auto boardora-scroll-region">
         {inviteRoomCode && !setupGame && (
           <div className="mb-6 rounded-2xl border border-[var(--cp-gold)] bg-[var(--cp-bg-elevated)] p-4 flex flex-wrap items-center justify-between gap-3">
             <div className="text-sm">
