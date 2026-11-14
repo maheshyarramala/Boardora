@@ -43,14 +43,14 @@ Suggested Play product ID: `boardora_premium_lifetime` (create this exact ID in 
 ## Staged rollout
 
 1. **Offline product boundary (current branch):** remove online room entry points, online game modes, WebSocket gameplay transport, and Express server startup from the player app.
-2. **Monetization foundation:** add Capacitor-compatible AdMob and Google Play Billing bridges behind feature/config guards; all SDK failures must fail open to gameplay.
-3. **Ad experience:** add the Game Hall banner, post-match interstitial frequency cap, and explicit rewarded cosmetic flow; test only with Google test IDs.
-4. **Premium entitlement:** add the lifetime product, purchase, restore, ownership refresh, and ad suppression.
+2. **AdMob test integration (current branch):** use Google's test App ID and test ad units, request consent before ads, show a Game Hall banner, and cap interstitials at one per three completed matches. SDK failures fail open to gameplay.
+3. **Production ad setup:** replace test IDs with the owner's AdMob App ID and banner/interstitial IDs after account setup; add a rewarded cosmetic flow only after a cosmetic store exists.
+4. **Premium entitlement:** add the lifetime product, purchase, restore, ownership refresh, and ad suppression using Google Play Billing.
 5. **Release readiness:** replace test IDs with the user's AdMob App ID / ad unit IDs, configure the Play Console product and price, add consent/privacy disclosures, and validate a Play internal-testing build.
 
 ## External setup required before earning revenue
 
-The app cannot earn from ads until the owner creates an AdMob app and ad units and supplies:
+The current branch uses Google test IDs and does not earn revenue. The app cannot earn from ads until the owner creates an AdMob app and ad units and supplies:
 - AdMob Android App ID.
 - Banner ad unit ID.
 - Interstitial ad unit ID.
