@@ -279,10 +279,10 @@ export function BoardPerspectiveStage({
     <div style={{ perspective: '1200px' }} className={`w-full ${className}`}>
       <div
         style={{
-          transform: 'rotateX(6deg)',
+          transform: 'rotateX(3.5deg)',
           transformStyle: 'preserve-3d',
         }}
-        className="rounded-2xl shadow-[0_24px_50px_-14px_rgba(3,9,20,0.78)] transition-transform duration-200 hover:[transform:rotateX(2deg)]"
+        className="boardora-3d-stage rounded-2xl shadow-[0_24px_50px_-14px_rgba(3,9,20,0.78)] transition-transform duration-200 hover:[transform:rotateX(1deg)_translateY(-2px)]"
       >
         {children}
       </div>
