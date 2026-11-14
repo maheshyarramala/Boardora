@@ -39,7 +39,7 @@ export function TitleScreen({ onEnterParlor }: TitleScreenProps) {
   }, [onEnterParlor]);
 
   return (
-    <section className="relative min-h-[100dvh] w-full overflow-hidden flex items-center bg-[#08172F] text-[#F4EBDD] boardora-shell-bg">
+    <section className="relative min-h-[100dvh] w-full overflow-x-hidden flex items-center bg-[#08172F] text-[#F4EBDD] boardora-shell-bg">
       {/* Subtle Ambient Gold Vignette */}
       <div
         aria-hidden="true"
