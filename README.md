@@ -131,7 +131,6 @@ See `.env.example` for template entries:
 
 | Variable | Scope | Description |
 |---|---|---|
-| `GEMINI_API_KEY` | Server | Optional server-side API key if server features require it (never exposed to client). |
 | `ANDROID_KEYSTORE_PATH` | CI / Gradle | Path to decoded `.jks` keystore during signed release builds. |
 | `ANDROID_KEYSTORE_PASSWORD` | CI / Gradle | Keystore password for release signing. |
 | `ANDROID_KEY_ALIAS` | CI / Gradle | Key alias for release signing. |
