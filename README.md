@@ -93,9 +93,20 @@ BOARDORA wraps the responsive web application inside Capacitor (`android/`) with
 
 ### Android Native Capabilities
 - **App ID / Name**: `com.boardora.teninone` — *BOARDORA*
-- **Minimal Permissions**: `INTERNET` and `ACCESS_NETWORK_STATE` are retained for optional cloud saves and future AdMob / Google Play Billing integration; `VIBRATE` is used for haptics. No game server is required.
-- **Offline Gameplay**: All ten games, AI, pass-and-play, local profiles, match history, achievements, and save backups work without network access. Optional Firebase cloud saves are separate from gameplay.
+- **Minimal Permissions**: `INTERNET` and `ACCESS_NETWORK_STATE` are used for optional cloud saves and AdMob; `VIBRATE` is used for haptics. No game server is required.
+- **Offline Gameplay**: All ten games, AI, pass-and-play, local profiles, match history, achievements, and save backups work without network access. Optional Firebase cloud saves and AdMob are separate from gameplay.
 - **Back Navigation & Safe Areas**: Android hardware back button pauses active matches or unwinds navigation screens cleanly; layout respects notch/navigation `env(safe-area-inset-*)` and portrait/landscape rotation.
+
+---
+
+## Monetization status
+
+- AdMob is wired in **Google test mode**: a banner appears only in the Game Hall and an interstitial may appear after every three completed matches.
+- Ads are never shown during a match or on app launch. If ads fail or the device is offline, gameplay continues.
+- The Android manifest currently contains Google's **test App ID and test ad units**. This build is for integration testing only; replace them with your own AdMob App ID and ad-unit IDs before a production release.
+- The one-time Boardora Premium purchase is planned but is not yet enabled. Create the `boardora_premium_lifetime` one-time product in Google Play Console before billing integration.
+
+See `docs/OFFLINE_MONETIZATION_PLAN.md` for the rollout and required setup.
 
 ---
 
