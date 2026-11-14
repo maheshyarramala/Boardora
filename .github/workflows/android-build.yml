@@ -17,11 +17,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # The repository currently has no package-lock.json.
+      # Keep npm caching disabled until a lockfile is committed.
       - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Setup Java 17
         uses: actions/setup-java@v4
@@ -34,8 +35,11 @@ jobs:
         with:
           cache-read-only: false
 
+      # npm install works without a pre-existing lockfile.
+      # Commit a reviewed package-lock.json later and switch to npm ci
+      # for fully reproducible dependency resolution.
       - name: Install npm dependencies
-        run: npm ci
+        run: npm install --no-audit --no-fund
 
       - name: Run Lint
         run: npm run lint:rules
@@ -78,8 +82,8 @@ jobs:
           APK_SIZE=$(du -h android/app/build/outputs/apk/debug/app-debug.apk | cut -f1)
           {
             echo "### BOARDORA — Android Debug APK"
-            echo "- **Application ID**: \`com.boardora.teninone\`"
-            echo "- **Build Variant**: \`debug\`"
-            echo "- **Artifact**: \`boardora-debug-apk\` (\`${APK_SIZE}\`)"
+            echo "- **Application ID**: `com.boardora.teninone`"
+            echo "- **Build Variant**: `debug`"
+            echo "- **Artifact**: `boardora-debug-apk` (`${APK_SIZE}`)"
             echo "- **Checks**: Rules Lint, TypeScript, Vitest, Vite Build, Gradle Debug"
           } >> "$GITHUB_STEP_SUMMARY"
