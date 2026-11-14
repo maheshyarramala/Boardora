@@ -45,6 +45,7 @@ import {
 } from '../../firebase/cloudSync';
 import { audioEngine } from '../../platform/audio';
 import { hapticsBridge } from '../../platform/haptics';
+import { maybeShowPostMatchInterstitial } from '../../monetization/ads';
 import { useAppState } from '../../state/AppStateContext';
 import { defaultRepository } from '../../storage/db';
 import { CURRENT_SCHEMA_VERSION } from '../../storage/migrations';
@@ -473,7 +474,13 @@ export function ActiveMatchRunner({
   };
 
   const handleExit = () => {
-    void refreshAll().then(() => onExit());
+    void (async () => {
+      if (outcome?.finished) {
+        await maybeShowPostMatchInterstitial();
+      }
+      await refreshAll();
+      onExit();
+    })();
   };
 
   if (!engine || !gameState) {
