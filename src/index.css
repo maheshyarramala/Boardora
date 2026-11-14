@@ -244,3 +244,130 @@
     overflow-y: auto;
   }
 }
+
+
+/* BOARDORA PREMIUM TABLETOP VISUAL SYSTEM */
+:root {
+  --cp-gold-glow: rgba(214, 173, 85, .22);
+  --cp-panel-glass: rgba(14, 33, 66, .84);
+}
+.boardora-shell-bg {
+  background-image:
+    radial-gradient(ellipse at 12% 4%, rgba(40, 101, 199, .16), transparent 34%),
+    radial-gradient(ellipse at 88% 22%, rgba(214, 173, 85, .13), transparent 38%),
+    linear-gradient(180deg, rgba(5, 14, 29, .12), rgba(5, 14, 29, .52)),
+    url("/assets/backgrounds/royal-navy-parlor.svg");
+  background-size: cover, cover, cover, cover;
+  background-position: center, center, center, center top;
+  background-attachment: scroll;
+}
+.boardora-shell-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .22;
+  background-image: linear-gradient(115deg, transparent 0 48%, rgba(214,173,85,.035) 49%, transparent 50% 100%);
+  background-size: 34px 34px;
+}
+.boardora-shell-bg > * { position: relative; }
+.boardora-enter { animation: boardoraFadeUp 420ms cubic-bezier(.2,.75,.25,1) both; }
+@keyframes boardoraCardRise {
+  from { opacity: 0; transform: translateY(12px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.game-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(214,173,85,.24);
+  background: linear-gradient(155deg, rgba(22,45,82,.98), rgba(7,20,41,.98));
+  box-shadow: 0 18px 38px -24px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.055);
+  animation: boardoraCardRise 420ms cubic-bezier(.2,.75,.25,1) both;
+  transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+}
+.game-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #eccb7c, transparent);
+  opacity: .8;
+  z-index: 2;
+}
+.game-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(236,203,124,.72);
+  box-shadow: 0 24px 48px -22px rgba(0,0,0,.95), 0 0 0 1px rgba(214,173,85,.08), 0 0 28px rgba(214,173,85,.10);
+}
+.game-card-art {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(214,173,85,.12), transparent 62%),
+    linear-gradient(135deg, #10294f, #07152c);
+}
+.game-card-art img {
+  transition: transform 550ms cubic-bezier(.2,.7,.2,1), filter 350ms ease;
+  filter: saturate(1.12) contrast(1.04);
+}
+.game-card:hover .game-card-art img { transform: scale(1.055); filter: saturate(1.22) contrast(1.06); }
+.game-card-art::after {
+  content: "";
+  position: absolute;
+  inset: 45% 0 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(5,14,29,.42));
+}
+.game-card-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(236,203,124,.45);
+  border-radius: .65rem;
+  color: #f0d58e;
+  background: linear-gradient(145deg, rgba(214,173,85,.18), rgba(8,23,47,.55));
+  font: 700 .7rem "JetBrains Mono", monospace;
+}
+.game-card-play {
+  box-shadow: 0 5px 16px rgba(214,173,85,.2), inset 0 1px 0 rgba(255,255,255,.38);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.game-card-play:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(214,173,85,.28); }
+.parlor-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 78% 20%, rgba(214,173,85,.16), transparent 36%),
+    radial-gradient(ellipse at 12% 100%, rgba(40,101,199,.15), transparent 44%),
+    linear-gradient(135deg, rgba(18,42,79,.97), rgba(6,18,38,.98));
+  box-shadow: 0 28px 64px -34px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.parlor-hero::after {
+  content: "";
+  position: absolute;
+  width: 360px; height: 360px;
+  right: -130px; top: -190px;
+  border: 1px solid rgba(214,173,85,.18);
+  border-radius: 50%;
+  box-shadow: 0 0 0 24px rgba(214,173,85,.025), 0 0 0 50px rgba(214,173,85,.018);
+  pointer-events: none;
+}
+.parlor-art-frame {
+  background: linear-gradient(145deg, rgba(214,173,85,.18), rgba(8,23,47,.25) 38%, rgba(214,173,85,.08));
+  border: 1px solid rgba(236,203,124,.48);
+  box-shadow: 0 24px 54px -24px rgba(0,0,0,.9), 0 0 38px rgba(214,173,85,.09);
+}
+.parlor-section-label {
+  color: var(--cp-gold-text);
+  letter-spacing: .2em;
+  font-size: .67rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+@media (prefers-reduced-motion: reduce) {
+  .game-card, .game-card-art img, .game-card-play { animation: none; transition: none; }
+}
