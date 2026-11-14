@@ -31,7 +31,10 @@ export function initializeBoardoraAds(): Promise<boolean> {
         consent = await AdMob.showConsentForm();
       }
 
-      if (!consent.canRequestAds) return false;
+      const consentAllowsAds =
+        consent.status === AdmobConsentStatus.NOT_REQUIRED ||
+        consent.status === AdmobConsentStatus.OBTAINED;
+      if (!consentAllowsAds) return false;
 
       try {
         await AdMob.prepareInterstitial({
