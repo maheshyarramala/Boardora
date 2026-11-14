@@ -34,7 +34,7 @@ Rulebooks for custom tabletop titles are stored under `docs/rulebooks/`, and eac
 
 ## Prerequisites
 
-- **Node.js**: `22.x` LTS (supported by Capacitor 6 and native ESM TypeScript loader)
+- **Node.js**: `24.x` LTS (supported by Capacitor 6 and native ESM TypeScript loader)
 - **npm**: `10.x`
 - **Java JDK**: `17` (for Android Gradle builds)
 - **Android SDK**: Platform API 34 (`compileSdkVersion 34`, `targetSdkVersion 34`) & Build Tools `34.0.0`
