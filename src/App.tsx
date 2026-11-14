@@ -212,7 +212,7 @@ function BoardoraShell() {
       </header>
 
       {/* Main Content Area (padded for mobile bottom tab bar + safe area) */}
-      <main className="flex-1 min-h-0 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 pb-24 md:pb-10 overflow-y-auto boardora-scroll-region">
+      <main className={`flex-1 min-h-0 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 ${activeTab === 'games' && !setupGame ? 'pb-36 md:pb-36' : 'pb-24 md:pb-10'} overflow-y-auto boardora-scroll-region`}>
         {setupGame ? (
           <GameSetupScreen
             game={setupGame}
