@@ -143,8 +143,8 @@ export function GameArenaShell({
       </div>
 
       {/* Main Unobstructed Playfield (my-auto prevents top clipping on overflow) */}
-      <main className="flex-1 min-h-0 flex flex-col overflow-y-auto overflow-x-hidden boardora-scroll-region px-2.5 py-2 sm:px-5 sm:py-3">
-        <div className="my-auto w-full">
+      <main className="flex-1 min-h-0 block overflow-y-auto overflow-x-hidden boardora-scroll-region px-2.5 py-2 sm:px-5 sm:py-3">
+        <div className="w-full min-h-max">
           {children}
         </div>
       </main>
