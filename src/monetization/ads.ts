@@ -12,7 +12,6 @@ const INTERSTITIAL_AD_ID = 'ca-app-pub-4460502069603024/6116110846';
 
 let initialization: Promise<boolean> | null = null;
 let interstitialPrepared = false;
-let completedMatchesSinceInterstitial = 0;
 
 export function initializeBoardoraAds(): Promise<boolean> {
   if (!Capacitor.isNativePlatform()) return Promise.resolve(false);
@@ -85,9 +84,8 @@ export async function removeGameHallBanner(): Promise<void> {
 export async function maybeShowPostMatchInterstitial(): Promise<void> {
   if (!(await initializeBoardoraAds())) return;
 
-  completedMatchesSinceInterstitial += 1;
-  if (completedMatchesSinceInterstitial < 3) return;
-  completedMatchesSinceInterstitial = 0;
+  // Show an interstitial after every finished match when the player returns
+  // from the results screen. A failed or unavailable ad never blocks gameplay.
 
   try {
     if (!interstitialPrepared) {
